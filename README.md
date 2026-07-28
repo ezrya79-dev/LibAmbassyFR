@@ -25,8 +25,8 @@ Calendly API v2 · bcryptjs
 ```bash
 npm install
 cp .env.example .env
-npx prisma db push
-node prisma/seed.mjs
+npm run db:push
+npm run db:seed
 npm run dev
 ```
 
@@ -43,3 +43,13 @@ front-end : tout est éditable depuis la console d'administration. Les sections 
 `[À COMPLÉTER]` sont à renseigner via `/admin/services`.
 
 Voir [`PROMPT-REBUILD.md`](PROMPT-REBUILD.md) pour le cahier des charges complet.
+
+## Déploiement
+
+Mise en production sur VPS (Docker + nginx + TLS Let's Encrypt) :
+voir [`DEPLOY.md`](DEPLOY.md).
+
+```bash
+# sur le VPS, en root
+LETSENCRYPT_EMAIL=vous@exemple.fr bash deploy/install-vps.sh
+```

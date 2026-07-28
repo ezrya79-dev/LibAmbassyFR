@@ -1,0 +1,25 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: libambassyfr:latest
+    container_name: libambassyfr
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "7100"
+      HOSTNAME: "0.0.0.0"
+      # Chemins internes au conteneur — persistés via le volume `data`.
+      DATABASE_URL: "file:/data/app.db"
+      UPLOAD_DIR: "/data/uploads"
+    volumes:
+      - data:/data
+    # Exposé uniquement en local : nginx assure le TLS et le reverse proxy.
+    ports:
+      - "127.0.0.1:7100:7100"
+
+volumes:
+  data:

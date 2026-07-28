@@ -15,7 +15,16 @@ export async function POST(req: NextRequest) {
     const header = req.headers.get("Calendly-Webhook-Signature") ?? "";
     const parts = Object.fromEntries(header.split(",").map((p) => p.split("=") as [string, string]));
     const expected = crypto.createHmac("sha256", signingKey).update(`${parts.t}.${body}`).digest("hex");
-    if (!parts.t || !parts.v1 || !crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(parts.v1))) {
+    // timingSafeEqual lève si les longueurs diffèrent : on compare d'abord la
+    // taille, sinon une signature tronquée provoquerait une 500 au lieu d'un 401.
+    const provided = Buffer.from(parts.v1 ?? "", "utf8");
+    const reference = Buffer.from(expected, "utf8");
+    if (
+      !parts.t ||
+      !parts.v1 ||
+      provided.length !== reference.length ||
+      !crypto.timingSafeEqual(reference, provided)
+    ) {
       return NextResponse.json({ error: "Signature invalide" }, { status: 401 });
     }
   } else if (process.env.NODE_ENV === "production") {

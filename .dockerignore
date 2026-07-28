@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.github
+uploads
+prisma/dev.db
+prisma/dev.db-journal
+.env
+.env.*
+!.env.example
+!.env.production.example
+dev.log
+*.tsbuildinfo
+next-env.d.ts
+Requirements

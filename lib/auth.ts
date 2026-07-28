@@ -26,6 +26,9 @@ export async function createSession(kind: "STAFF" | "APPLICANT", id: string) {
   jar.set(kind === "STAFF" ? STAFF_COOKIE : APPLICANT_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
+    // En production le portail est servi derrière HTTPS : le jeton de session
+    // ne doit jamais transiter en clair.
+    secure: process.env.NODE_ENV === "production",
     path: "/",
     expires: expiresAt,
   });
