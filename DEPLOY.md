@@ -1,7 +1,17 @@
 # Déploiement sur VPS — alfpr.joefr.cloud
 
 Guide de mise en production de LibAmbassyFR sur un VPS Debian 12 / Ubuntu 22.04+.
-L'application tourne dans un conteneur Docker derrière nginx (TLS Let's Encrypt).
+
+Deux modes sont fournis :
+
+- **Option A (recommandée) — modèle YCID** : pm2 + runner GitHub Actions
+  self-hosted, comme Solid'Pilot (`joe17xe/YCID`). Déploiement automatique à
+  chaque merge sur `main`, mêmes conventions que le reste de l'infrastructure
+  (utilisateur `deploy`, `/opt/<app>`, `deploy.sh` verrouillé, pm2).
+- **Option B — Docker Compose** : conteneur isolé, si vous préférez ne rien
+  installer globalement sur le VPS.
+
+Dans les deux cas, nginx fait le TLS (Let's Encrypt) devant le port local 7100.
 
 ---
 
@@ -10,13 +20,60 @@ L'application tourne dans un conteneur Docker derrière nginx (TLS Let's Encrypt
 - Un VPS Debian/Ubuntu avec accès `root` (ou `sudo`).
 - L'enregistrement DNS **A** `alfpr.joefr.cloud` pointant vers l'IP du VPS.
   Vérification : `dig +short alfpr.joefr.cloud` doit renvoyer l'IP du serveur.
-- Les ports **80** et **443** ouverts (le script configure `ufw`).
+- Les ports **80** et **443** ouverts (les scripts configurent `ufw`).
 
 ---
 
-## 2. Installation (une seule commande)
+## 2. Option A (recommandée) — pm2 + déploiement automatique (modèle YCID)
+
+### Installation initiale
 
 Sur le VPS, en root :
+
+```bash
+apt-get update && apt-get install -y git
+git clone -b claude/deploy-vps-ezrya-geii8k https://github.com/ezrya79-dev/libambassyfr.git /opt/libambassyfr
+cd /opt/libambassyfr
+LETSENCRYPT_EMAIL=ezrya79@gmail.com bash deploy/install-vps-pm2.sh
+```
+
+Le script (idempotent) installe Node 22 + pm2 + nginx + certbot, crée
+l'utilisateur `deploy`, les répertoires de données (`/var/lib/libambassyfr`),
+le `.env`, lance un premier déploiement complet via `deploy/deploy.sh`,
+puis met en place le TLS en deux phases (challenge ACME → conf HTTPS).
+
+### Déploiement automatique à chaque merge
+
+Comme pour YCID : un runner GitHub Actions self-hosted sur le VPS exécute
+`deploy.sh` à chaque push sur `main` (workflow `.github/workflows/deploy.yml`,
+labels `[self-hosted, libambassyfr]`).
+
+```bash
+# Token : GitHub → ezrya79-dev/LibAmbassyFR → Settings → Actions → Runners
+#         → New self-hosted runner → Linux (valide ~1 h)
+sudo bash /opt/libambassyfr/deploy/setup-runner.sh <TOKEN_GITHUB>
+```
+
+Si le runner YCID tourne déjà sur ce VPS, celui-ci s'installe **à côté**
+(`/opt/actions-runner-libambassyfr`) : un runner ne sert qu'un seul dépôt.
+
+### Exploitation (option A)
+
+```bash
+sudo bash /opt/libambassyfr/deploy/deploy.sh        # redéploiement manuel
+sudo -u deploy pm2 logs libambassyfr --lines 50     # journaux
+sudo -u deploy pm2 status                           # état
+bash /opt/libambassyfr/deploy/backup.sh             # sauvegarde ponctuelle
+```
+
+`deploy.sh` reprend les correctifs éprouvés du script YCID : remise des droits
+sur tout le dépôt avant le pull (objets `.git` créés par root), et
+`pm2 startOrRestart --update-env` pour que chaque déploiement recharge le
+`.env` (au lieu de conserver d'anciennes valeurs figées).
+
+---
+
+## 3. Option B — Docker Compose
 
 ```bash
 apt-get update && apt-get install -y git
@@ -25,21 +82,18 @@ cd /opt/libambassyfr
 LETSENCRYPT_EMAIL=ezrya79@gmail.com bash deploy/install-vps.sh
 ```
 
-Le script `deploy/install-vps.sh` est **idempotent** — il peut être relancé sans risque. Il :
+Le script installe Docker + nginx + certbot, construit l'image
+(`Dockerfile` multi-étapes), démarre le conteneur (port local 7100, volume
+`data` pour la base et les uploads) et met en place le TLS.
 
-1. installe Docker, nginx, certbot et ufw ;
-2. crée `.env` depuis `.env.production.example` s'il n'existe pas ;
-3. ouvre le pare-feu (SSH + HTTP + HTTPS) ;
-4. construit l'image et démarre le conteneur, puis attend que l'app réponde ;
-5. installe une conf nginx HTTP le temps du challenge ACME ;
-6. obtient le certificat Let's Encrypt (`certbot certonly --webroot`) ;
-7. bascule sur la conf nginx HTTPS définitive et active le renouvellement auto.
+Exploitation : `docker compose logs -f app`, `docker compose restart app`,
+`bash deploy/update.sh` (sauvegarde + pull + rebuild + redémarrage).
 
-À l'issue, le portail est disponible sur **https://alfpr.joefr.cloud**.
+> Ne mélangez pas les deux options sur le même VPS : choisissez-en une.
 
 ---
 
-## 3. Après la première installation — à faire impérativement
+## 4. Après la première installation — à faire impérativement
 
 Le seed crée trois comptes de démonstration dont les mots de passe sont publics
 (ils figurent dans ce dépôt) :
@@ -51,12 +105,14 @@ Le seed crée trois comptes de démonstration dont les mots de passe sont public
 | `agent.passeport@ambassadeliban.fr` | `Agent123!` | AGENT |
 
 **Changez ces trois mots de passe dès la première connexion** via
-`https://alfpr.joefr.cloud/admin/utilisateurs`. Tant que ce n'est pas fait, la
-console d'administration est accessible à quiconque a lu ce dépôt.
+`https://alfpr.joefr.cloud/admin/utilisateurs`.
+
+Ensuite, ouvrez **Admin → Disponibilités** pour ajuster les plages de
+rendez-vous (le seed ouvre lun–ven 9h–14h, RDV de 20 min).
 
 ---
 
-## 4. Configuration Calendly (optionnel)
+## 5. Configuration Calendly (optionnel)
 
 > Depuis la refonte du parcours (voir `docs/PARCOURS-RDV.md`), la prise de RDV
 > est **native** : calendrier, confirmation et gestion se font dans le portail,
@@ -72,7 +128,7 @@ CALENDLY_CLIENT_SECRET="…"
 CALENDLY_WEBHOOK_SIGNING_KEY="…"
 ```
 
-Puis `bash deploy/update.sh` (ou `docker compose up -d`) pour recharger.
+Puis redéployez (`sudo bash deploy/deploy.sh` ou `bash deploy/update.sh`).
 
 Côté [Calendly Developer](https://developer.calendly.com/) :
 
@@ -80,84 +136,61 @@ Côté [Calendly Developer](https://developer.calendly.com/) :
 - **Webhook URL** : `https://alfpr.joefr.cloud/api/webhooks/calendly`
   (événements `invitee.created` et `invitee.canceled`)
 
-> En production, l'endpoint webhook **rejette toute requête** tant que
-> `CALENDLY_WEBHOOK_SIGNING_KEY` n'est pas renseignée (HTTP 500). C'est
-> volontaire : aucun événement non signé n'est accepté.
-
-L'appairage OAuth se lance ensuite depuis `/admin/calendly`.
+En production, l'endpoint webhook **rejette toute requête** tant que
+`CALENDLY_WEBHOOK_SIGNING_KEY` n'est pas renseignée.
 
 ---
 
-## 5. Exploitation courante
+## 6. Sauvegardes et données persistées
+
+| Mode | Base SQLite | Documents usagers |
+|---|---|---|
+| pm2 (option A) | `/var/lib/libambassyfr/app.db` | `/var/lib/libambassyfr/uploads` |
+| Docker (option B) | volume `libambassyfr_data` → `/data/app.db` | `/data/uploads` |
+
+`deploy/backup.sh` détecte automatiquement le mode et archive base + uploads
+dans `/var/backups/libambassyfr` (rétention 30 jours). Sauvegarde quotidienne :
 
 ```bash
-cd /opt/libambassyfr
-
-docker compose logs -f app     # journaux en direct
-docker compose ps              # état du conteneur
-docker compose restart app     # redémarrage
-docker compose down            # arrêt
-
-bash deploy/update.sh          # sauvegarde + git pull + rebuild + redémarrage
-bash deploy/backup.sh          # sauvegarde ponctuelle
-```
-
-### Sauvegardes automatiques
-
-`deploy/backup.sh` archive la base SQLite et les documents usagers dans
-`/var/backups/libambassyfr` (rétention 30 jours). Pour une sauvegarde
-quotidienne à 3 h :
-
-```bash
-echo '0 3 * * * root cd /opt/libambassyfr && bash deploy/backup.sh >> /var/log/libambassyfr-backup.log 2>&1' \
+echo '0 3 * * * root bash /opt/libambassyfr/deploy/backup.sh >> /var/log/libambassyfr-backup.log 2>&1' \
   > /etc/cron.d/libambassyfr-backup
 ```
 
----
-
-## 6. Ce qui est persisté
-
-Tout l'état vit dans le volume Docker `libambassyfr_data`, monté sur `/data` :
-
-| Chemin | Contenu |
-|---|---|
-| `/data/app.db` | base SQLite (services, RDV, usagers, comptes, contenus) |
-| `/data/uploads` | pièces jointes déposées par les usagers |
-
-Le volume survit à `docker compose down` et aux rebuilds d'image. Il n'est
-supprimé que par `docker compose down -v` — **à ne jamais lancer en production**.
-
-Au démarrage, le conteneur applique le schéma (`prisma db push`) puis n'exécute
-le seed **que si la base est vide** (`deploy/seed-if-empty.mjs`). Les
-redémarrages ne dupliquent donc jamais les données.
+Au déploiement, le schéma est appliqué par `prisma db push` et le seed ne
+s'exécute **que si la base est vide** : les redéploiements ne dupliquent
+jamais les données.
 
 ---
 
 ## 7. Dépannage
 
-**Le certificat n'est pas délivré** — vérifiez que le DNS est propagé et que le
-port 80 est joignable depuis l'extérieur :
+**Le certificat n'est pas délivré** — vérifiez le DNS et le port 80 :
 
 ```bash
 dig +short alfpr.joefr.cloud
 curl -I http://alfpr.joefr.cloud/.well-known/acme-challenge/test
 ```
 
-**502 Bad Gateway** — le conteneur ne répond pas sur 7100 :
+**502 Bad Gateway** — l'application ne répond pas sur 7100 :
 
 ```bash
-docker compose ps
-docker compose logs --tail=100 app
+sudo -u deploy pm2 status && sudo -u deploy pm2 logs libambassyfr --lines 50   # option A
+docker compose ps && docker compose logs --tail=100 app                        # option B
 curl -I http://127.0.0.1:7100/
 ```
 
+**Le workflow GitHub reste en attente (« Waiting for a runner »)** — le runner
+self-hosted est arrêté ou n'a pas le label `libambassyfr` :
+
+```bash
+cd /opt/actions-runner-libambassyfr && sudo ./svc.sh status
+```
+
 **413 Request Entity Too Large à l'upload** — `client_max_body_size` dans
-`deploy/nginx/alfpr.joefr.cloud.conf` doit être ≥ `MAX_UPLOAD_MB` du `.env`
-(500 Mo des deux côtés par défaut).
+`deploy/nginx/alfpr.joefr.cloud.conf` doit être ≥ `MAX_UPLOAD_MB` du `.env`.
 
 **Déconnexion immédiate après login** — les cookies de session sont émis avec
 l'attribut `Secure` en production : le portail **doit** être servi en HTTPS.
-Un accès direct en `http://IP:7100` ne permettra pas de rester connecté.
 
 ---
 
@@ -166,9 +199,8 @@ Un accès direct en `http://IP:7100` ne permettra pas de rester connecté.
 SQLite convient au volume d'un poste consulaire. Pour passer à PostgreSQL :
 
 1. dans `prisma/schema.prisma`, remplacer `provider = "sqlite"` par `"postgresql"` ;
-2. ajouter un service `db` (image `postgres:16`) dans `docker-compose.yml` ;
-3. pointer `DATABASE_URL` sur `postgresql://user:pass@db:5432/libambassy` ;
-4. rebuild : `docker compose up -d --build`.
+2. fournir un serveur PostgreSQL et pointer `DATABASE_URL` dessus ;
+3. redéployer.
 
 Les données existantes doivent être migrées manuellement (export/import).
 
@@ -184,8 +216,4 @@ npm run db:seed
 npm run dev          # http://localhost:3000
 ```
 
-Pour tester le build de production localement :
-
-```bash
-npm run build && npm start
-```
+Pour tester le build de production localement : `npm run build && npm start`.

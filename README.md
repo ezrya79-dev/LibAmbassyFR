@@ -52,10 +52,13 @@ Voir [`PROMPT-REBUILD.md`](PROMPT-REBUILD.md) pour le cahier des charges complet
 
 ## Déploiement
 
-Mise en production sur VPS (Docker + nginx + TLS Let's Encrypt) :
-voir [`DEPLOY.md`](DEPLOY.md).
+Mise en production sur VPS : voir [`DEPLOY.md`](DEPLOY.md).
 
-```bash
-# sur le VPS, en root
-LETSENCRYPT_EMAIL=vous@exemple.fr bash deploy/install-vps.sh
-```
+- **Recommandé (modèle YCID)** : pm2 + runner GitHub Actions self-hosted —
+  déploiement automatique à chaque merge sur `main`.
+  ```bash
+  # sur le VPS, en root
+  LETSENCRYPT_EMAIL=vous@exemple.fr bash deploy/install-vps-pm2.sh
+  bash deploy/setup-runner.sh <TOKEN_GITHUB>
+  ```
+- Alternative : Docker Compose (`bash deploy/install-vps.sh`).
