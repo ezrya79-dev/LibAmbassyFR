@@ -1,0 +1,223 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Ambassade / consulat (multi-tenant ready)
+model Entity {
+  id           String    @id @default(cuid())
+  name         String
+  tagline      String?
+  logoUrl      String?
+  primaryColor String    @default("#006233")
+  address      String
+  phone        String
+  email        String
+  openingHours String
+  createdAt    DateTime  @default(now())
+  services     Service[]
+  users        User[]
+}
+
+model Service {
+  id           String      @id @default(cuid())
+  entityId     String
+  entity       Entity      @relation(fields: [entityId], references: [id])
+  slug         String
+  name         String
+  icon         String?
+  order        Int         @default(0)
+  active       Boolean     @default(true)
+  contactEmail String?
+  banner       String?
+  formalities  Formality[]
+
+  @@unique([entityId, slug])
+}
+
+model Formality {
+  id                   String             @id @default(cuid())
+  serviceId            String
+  service              Service            @relation(fields: [serviceId], references: [id])
+  slug                 String
+  name                 String
+  description          String?
+  content              String? // markdown : pièces, procédure, notes
+  taxAmount            Float?
+  taxCurrency          String             @default("EUR")
+  taxMode              String? // espèces / virement / en ligne
+  taxDetail            String?
+  emailContact         String?
+  calendlyUrl          String? // scheduling link (embed iframe)
+  calendlyEventTypeUri String? // API v2 event type URI
+  order                Int                @default(0)
+  active               Boolean            @default(true)
+  requiredDocuments    RequiredDocument[]
+  appointments         Appointment[]
+  documents            Document[]
+
+  @@unique([serviceId, slug])
+}
+
+model RequiredDocument {
+  id          String   @id @default(cuid())
+  formalityId String
+  formality   Formality @relation(fields: [formalityId], references: [id])
+  label       String
+  required    Boolean  @default(true)
+  order       Int      @default(0)
+}
+
+// Mouhafaza / Kaza / Commune — hiérarchie paramétrable extensible
+model AdminDivision {
+  id          String          @id @default(cuid())
+  level       Int // 1 = mouhafaza, 2 = kaza, 3 = commune
+  name        String
+  parentId    String?
+  parent      AdminDivision?  @relation("DivisionTree", fields: [parentId], references: [id])
+  children    AdminDivision[] @relation("DivisionTree")
+  countryCode String          @default("LB")
+  order       Int             @default(0)
+
+  @@index([level, parentId])
+}
+
+model DepartmentRedirectRule {
+  id          String  @id @default(cuid())
+  departments String // liste CSV : "01,03,04"
+  targetName  String
+  message     String
+  contactEmail String
+  active      Boolean @default(true)
+}
+
+model Applicant {
+  id             String        @id @default(cuid())
+  firstName      String
+  lastName       String
+  birthDate      String?
+  email          String        @unique
+  phone          String?
+  addressFrStreet String?
+  addressFrZip   String?
+  addressFrCity  String?
+  addressFrDept  String?
+  mouhafazaId    String?
+  kazaId         String?
+  communeId      String?
+  status         String        @default("ACTIF")
+  notes          String?
+  createdAt      DateTime      @default(now())
+  nationalities  Nationality[]
+  documents      Document[]
+  appointments   Appointment[]
+}
+
+model Nationality {
+  id             String    @id @default(cuid())
+  applicantId    String
+  applicant      Applicant @relation(fields: [applicantId], references: [id])
+  rank           Int // 1..3
+  country        String
+  attachmentPath String?
+}
+
+model Appointment {
+  id                 String    @id @default(cuid())
+  applicantId        String
+  applicant          Applicant @relation(fields: [applicantId], references: [id])
+  formalityId        String
+  formality          Formality @relation(fields: [formalityId], references: [id])
+  calendlyEventUri   String?
+  calendlyInviteeUri String?
+  status             String    @default("SCHEDULED") // SCHEDULED / CANCELED / COMPLETED / NO_SHOW
+  startAt            DateTime?
+  endAt              DateTime?
+  notes              String?
+  createdAt          DateTime  @default(now())
+  documents          Document[]
+}
+
+model Document {
+  id            String       @id @default(cuid())
+  applicantId   String
+  applicant     Applicant    @relation(fields: [applicantId], references: [id])
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  formalityId   String?
+  formality     Formality?   @relation(fields: [formalityId], references: [id])
+  type          String       @default("PIECE_JOINTE")
+  fileName      String
+  filePath      String
+  size          Int          @default(0)
+  status        String       @default("RECEIVED") // RECEIVED / VALIDATED / REJECTED / MORE_INFO
+  createdAt     DateTime     @default(now())
+}
+
+model User {
+  id           String    @id @default(cuid())
+  entityId     String?
+  entity       Entity?   @relation(fields: [entityId], references: [id])
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         String    @default("AGENT") // AGENT / SUPERVISOR / ADMIN
+  serviceIds   String    @default("[]") // JSON array — scoping par service
+  mfaEnabled   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+}
+
+model Session {
+  id          String   @id @default(cuid())
+  token       String   @unique
+  kind        String // STAFF / APPLICANT
+  userId      String?
+  applicantId String?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  purpose   String   @default("LOGIN")
+  expiresAt DateTime
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Contenu éditorial paramétrable (bandeaux, notes, mentions)
+model ContentBlock {
+  id        String   @id @default(cuid())
+  key       String
+  locale    String   @default("fr")
+  title     String?
+  body      String
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, locale])
+}
+
+model CalendlyConnection {
+  id                String    @id @default(cuid())
+  singleton         String    @unique @default("main")
+  organizationUri   String?
+  accessToken       String?
+  refreshToken      String?
+  webhookSigningKey String?
+  connectedAt       DateTime?
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  target    String?
+  meta      String?
+  createdAt DateTime @default(now())
+}

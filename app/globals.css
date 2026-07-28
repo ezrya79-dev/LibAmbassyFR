@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+:root {
+  --brand: #006233;
+  --brand-dark: #004d28;
+  --brand-light: #e8f5ee;
+  --accent: #ee161f;
+}
+
+body {
+  @apply bg-stone-50 text-stone-900 antialiased;
+}
+
+.prose-content h3 {
+  @apply font-semibold mt-4 mb-1;
+}
+.prose-content p {
+  @apply my-2 text-sm leading-relaxed;
+}
