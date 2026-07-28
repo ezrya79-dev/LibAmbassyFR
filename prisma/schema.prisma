@@ -24,19 +24,47 @@ model Entity {
 }
 
 model Service {
-  id           String      @id @default(cuid())
-  entityId     String
-  entity       Entity      @relation(fields: [entityId], references: [id])
-  slug         String
-  name         String
-  icon         String?
-  order        Int         @default(0)
-  active       Boolean     @default(true)
-  contactEmail String?
-  banner       String?
-  formalities  Formality[]
+  id                String             @id @default(cuid())
+  entityId          String
+  entity            Entity             @relation(fields: [entityId], references: [id])
+  slug              String
+  name              String
+  icon              String?
+  order             Int                @default(0)
+  active            Boolean            @default(true)
+  contactEmail      String?
+  banner            String?
+  formalities       Formality[]
+  availabilityRules AvailabilityRule[]
+  closedPeriods     ClosedPeriod[]
 
   @@unique([entityId, slug])
+}
+
+// Plage d'ouverture récurrente d'un service — le moteur de créneaux natif
+// génère les créneaux réservables à partir de ces règles (heure de Paris).
+model AvailabilityRule {
+  id          String  @id @default(cuid())
+  serviceId   String
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  weekday     Int // 1 = lundi … 7 = dimanche
+  startMinute Int // minutes depuis minuit (heure de Paris) : 540 = 9h00
+  endMinute   Int
+  slotMinutes Int     @default(20) // durée d'un rendez-vous
+  capacity    Int     @default(1) // guichets en parallèle sur ce créneau
+  active      Boolean @default(true)
+
+  @@index([serviceId, weekday])
+}
+
+// Fermeture exceptionnelle (jour férié, congé…) — bloque la prise de RDV.
+model ClosedPeriod {
+  id        String   @id @default(cuid())
+  serviceId String? // null = toute l'ambassade
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  startDate String // "YYYY-MM-DD" (date civile à Paris)
+  endDate   String
+  reason    String?
 }
 
 model Formality {
@@ -134,12 +162,18 @@ model Appointment {
   formality          Formality @relation(fields: [formalityId], references: [id])
   calendlyEventUri   String?
   calendlyInviteeUri String?
+  // Réservation native — nullables pour compatibilité avec les RDV Calendly
+  // historiques et `prisma db push` sur base existante.
+  reference          String?   @unique // code communiqué à l'usager (ex. LB-4K7TQD)
+  manageToken        String?   @unique // secret des liens annuler/déplacer/ICS
   status             String    @default("SCHEDULED") // SCHEDULED / CANCELED / COMPLETED / NO_SHOW
   startAt            DateTime?
   endAt              DateTime?
   notes              String?
   createdAt          DateTime  @default(now())
   documents          Document[]
+
+  @@index([formalityId, startAt, status])
 }
 
 model Document {

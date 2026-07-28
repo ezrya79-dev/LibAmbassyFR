@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { LayoutDashboard, Settings2, MapPin, Globe2, Calendar, Users2, FileEdit } from "lucide-react";
+import { LayoutDashboard, Settings2, MapPin, Globe2, CalendarClock, Calendar, Users2, FileEdit } from "lucide-react";
 
 const LINKS = [
   { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
   { href: "/admin/services", label: "Services & Formalités", icon: Settings2 },
+  { href: "/admin/disponibilites", label: "Disponibilités", icon: CalendarClock },
   { href: "/admin/redirections", label: "Redirections", icon: MapPin },
   { href: "/admin/divisions", label: "Divisions (Liban)", icon: Globe2 },
-  { href: "/admin/calendly", label: "Calendly", icon: Calendar },
+  { href: "/admin/calendly", label: "Calendly (option)", icon: Calendar },
   { href: "/admin/utilisateurs", label: "Comptes & rôles", icon: Users2 },
   { href: "/admin/contenu", label: "Contenu & marque", icon: FileEdit },
 ];

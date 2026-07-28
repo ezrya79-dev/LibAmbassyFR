@@ -83,8 +83,8 @@ export default async function StaffPage({
       {appointments.length === 0 ? (
         <div className="rounded-xl border border-dashed border-stone-300 bg-white p-10 text-center text-sm text-stone-500">
           <CalendarDays className="mx-auto mb-2 h-8 w-8 text-stone-300" />
-          Aucun rendez-vous. Les réservations Calendly apparaîtront ici via le webhook
-          (invitee.created), ou créez-en un de test depuis l'admin.
+          Aucun rendez-vous. Les réservations prises sur le portail apparaissent ici en temps réel.
+          Vérifiez que des disponibilités sont ouvertes dans Admin → Disponibilités.
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-stone-200 bg-white">
@@ -92,6 +92,7 @@ export default async function StaffPage({
             <thead className="border-b bg-stone-50 text-left text-xs uppercase text-stone-500">
               <tr>
                 <th className="px-4 py-3">Date / heure</th>
+                <th className="px-4 py-3">Référence</th>
                 <th className="px-4 py-3">Usager</th>
                 <th className="px-4 py-3">Service / Formalité</th>
                 <th className="px-4 py-3">Statut</th>
@@ -102,8 +103,15 @@ export default async function StaffPage({
               {appointments.map((a) => (
                 <tr key={a.id} className="border-b last:border-0 hover:bg-stone-50">
                   <td className="px-4 py-3">
-                    {a.startAt ? a.startAt.toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }) : "—"}
+                    {a.startAt
+                      ? a.startAt.toLocaleString("fr-FR", {
+                          timeZone: "Europe/Paris",
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        })
+                      : "—"}
                   </td>
+                  <td className="px-4 py-3 font-mono text-xs">{a.reference ?? "—"}</td>
                   <td className="px-4 py-3">
                     <div className="font-medium">{a.applicant.firstName} {a.applicant.lastName}</div>
                     <div className="text-xs text-stone-500">{a.applicant.email}</div>

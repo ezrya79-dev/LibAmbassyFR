@@ -6,7 +6,10 @@ DB_FILE="$(printf '%s' "${DATABASE_URL:-file:/data/app.db}" | sed 's|^file:||')"
 mkdir -p "$(dirname "$DB_FILE")" "${UPLOAD_DIR:-/data/uploads}"
 
 echo "→ Synchronisation du schéma Prisma ($DB_FILE)"
-npx --no-install prisma db push --skip-generate
+# --accept-data-loss : le projet fonctionne en `db push` (pas de migrations) ;
+# sans ce drapeau, tout ajout d'index unique bloquerait le démarrage. Les
+# sauvegardes quotidiennes (deploy/backup.sh) couvrent le risque résiduel.
+npx --no-install prisma db push --skip-generate --accept-data-loss
 
 # Le seed utilise des `create` : il n'est pas idempotent. On ne l'exécute donc
 # que si la base est vide. SEED_ON_START=0 pour le désactiver totalement.

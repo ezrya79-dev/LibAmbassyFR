@@ -56,7 +56,13 @@ console d'administration est accessible à quiconque a lu ce dépôt.
 
 ---
 
-## 4. Configuration Calendly
+## 4. Configuration Calendly (optionnel)
+
+> Depuis la refonte du parcours (voir `docs/PARCOURS-RDV.md`), la prise de RDV
+> est **native** : calendrier, confirmation et gestion se font dans le portail,
+> sans Calendly. Cette section ne concerne que la synchronisation optionnelle
+> d'agendas Calendly existants pendant une transition. **Vous pouvez sauter
+> cette étape** : le portail est pleinement fonctionnel sans.
 
 Dans `/opt/libambassyfr/.env` :
 

@@ -223,6 +223,66 @@ export async function saveEntity(formData: FormData) {
 }
 
 // ---------- Calendly ----------
+// ---------- Disponibilités (moteur de créneaux natif) ----------
+// Les heures sont saisies en "HH:MM" (heure de Paris) et stockées en minutes.
+const toMinutes = (v: FormDataEntryValue | null) => {
+  const [h, m] = str(v).split(":").map(Number);
+  return (h || 0) * 60 + (m || 0);
+};
+
+export async function saveAvailabilityRule(formData: FormData) {
+  const user = await requireAdmin();
+  const id = str(formData.get("id"));
+  const data = {
+    serviceId: str(formData.get("serviceId")),
+    weekday: Number(str(formData.get("weekday")) || 1),
+    startMinute: toMinutes(formData.get("start")),
+    endMinute: toMinutes(formData.get("end")),
+    slotMinutes: Math.max(5, Number(str(formData.get("slotMinutes")) || 20)),
+    capacity: Math.max(1, Number(str(formData.get("capacity")) || 1)),
+    active: bool(formData.get("active")),
+  };
+  if (data.endMinute <= data.startMinute) return;
+  if (id) {
+    await db.availabilityRule.update({ where: { id }, data });
+  } else {
+    await db.availabilityRule.create({ data });
+  }
+  await audit(user.id, id ? "AVAILABILITY_UPDATE" : "AVAILABILITY_CREATE", data.serviceId);
+  revalidatePath("/admin/disponibilites");
+}
+
+export async function deleteAvailabilityRule(id: string) {
+  const user = await requireAdmin();
+  await db.availabilityRule.delete({ where: { id } });
+  await audit(user.id, "AVAILABILITY_DELETE", id);
+  revalidatePath("/admin/disponibilites");
+}
+
+export async function saveClosedPeriod(formData: FormData) {
+  const user = await requireAdmin();
+  const startDate = str(formData.get("startDate"));
+  const endDate = str(formData.get("endDate")) || startDate;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || endDate < startDate) return;
+  await db.closedPeriod.create({
+    data: {
+      serviceId: str(formData.get("serviceId")) || null,
+      startDate,
+      endDate,
+      reason: str(formData.get("reason")) || null,
+    },
+  });
+  await audit(user.id, "CLOSED_PERIOD_CREATE", `${startDate}→${endDate}`);
+  revalidatePath("/admin/disponibilites");
+}
+
+export async function deleteClosedPeriod(id: string) {
+  const user = await requireAdmin();
+  await db.closedPeriod.delete({ where: { id } });
+  await audit(user.id, "CLOSED_PERIOD_DELETE", id);
+  revalidatePath("/admin/disponibilites");
+}
+
 export async function saveCalendlySettings(formData: FormData) {
   const user = await requireAdmin();
   const existing = await db.calendlyConnection.findUnique({ where: { singleton: "main" } });

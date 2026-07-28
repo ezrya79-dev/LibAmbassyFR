@@ -47,6 +47,24 @@ async function main() {
     });
   }
 
+  // --- Disponibilités par défaut (moteur de créneaux natif) ---
+  // Ouverture au public 8h30–14h30 : créneaux du lundi au vendredi, 9h–14h.
+  // RDV de 20 min ; 2 guichets pour les passeports (service le plus demandé).
+  for (const s of Object.values(services)) {
+    for (let weekday = 1; weekday <= 5; weekday++) {
+      await prisma.availabilityRule.create({
+        data: {
+          serviceId: s.id,
+          weekday,
+          startMinute: 9 * 60,
+          endMinute: 14 * 60,
+          slotMinutes: 20,
+          capacity: s.slug === "passeport" ? 2 : 1,
+        },
+      });
+    }
+  }
+
   // --- Formalités ---
   const cal = "https://calendly.com/passeport-consulat/30min";
   const F = (serviceSlug, data) =>
@@ -269,10 +287,10 @@ async function main() {
 
   // --- Blocs de contenu éditorial ---
   const blocks = [
-    { key: "home.tile.rdv", title: "PRISE RDV", body: "Réservez un créneau auprès du service consulaire concerné." },
-    { key: "home.tile.profile", title: "MODIFIEZ VOTRE PROFIL", body: "Mettez à jour vos informations personnelles et vos nationalités." },
-    { key: "home.tile.documents", title: "ATTACHEZ VOS DOCUMENTS", body: "Déposez les pièces justificatives de vos démarches en cours." },
-    { key: "rdv.intro.steps", title: "Étapes de prise de rendez-vous", body: "1. Sélectionnez le service consulaire concerné.\n2. Choisissez la formalité à effectuer au sein de ce service.\n3. Accédez au calendrier correspondant, où vous pourrez réserver un créneau en fonction des disponibilités." },
+    { key: "home.tile.rdv", title: "PRENDRE RENDEZ-VOUS", body: "Choisissez votre formalité, un créneau, et repartez avec une confirmation immédiate — sans créer de compte." },
+    { key: "home.tile.gestion", title: "GÉRER MON RENDEZ-VOUS", body: "Retrouvez, déplacez ou annulez votre rendez-vous avec votre référence et votre email." },
+    { key: "home.tile.profile", title: "MON ESPACE (OPTIONNEL)", body: "Créez un espace pour retrouver vos rendez-vous passés et à venir et pré-remplir vos démarches." },
+    { key: "rdv.intro.steps", title: "Étapes de prise de rendez-vous", body: "1. Sélectionnez le service consulaire concerné.\n2. Choisissez la formalité : la liste des pièces à fournir s'affiche avant toute réservation.\n3. Choisissez un créneau et confirmez : votre rendez-vous n'est enregistré qu'après l'écran de confirmation, qui récapitule adresse, durée, pièces et référence." },
     { key: "rdv.banner", title: "Privilégiez l'email", body: BANNER },
   ];
   for (const b of blocks) {

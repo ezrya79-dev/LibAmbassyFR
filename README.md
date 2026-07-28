@@ -5,20 +5,26 @@ Rebuild moderne et entièrement paramétrable du portail e-services d'une ambass
 
 ## Fonctionnalités
 
-- **Frontend public** : accueil 3 modules, wizard de prise de RDV (service → formalité →
-  calendrier Calendly en embed iframe), vérification de circonscription par département,
-  profil usager (OTP par email), dépôt de documents (500 Mo max), i18n FR / EN / AR (RTL).
-- **Console employés `/staff`** : RDV filtrables, scoping par service, fiche usager,
-  statuts, notes internes, demande de pièce complémentaire, export CSV.
-- **Console admin `/admin`** : CRUD services / formalités / pièces requises / taxes,
-  règles de redirection, divisions administratives (import CSV), comptes & rôles RBAC + MFA,
-  éditeur de contenu multilingue, branding, mapping Calendly, tableau de bord, audit log.
-- **Calendly** : OAuth2 + webhooks signés (`invitee.created` / `invitee.canceled`).
+- **Prise de RDV native, sans compte** : service → formalité (pièces à fournir affichées
+  avant le calendrier) → créneau → coordonnées → **écran de confirmation final**
+  (date, durée, adresse, pièces à apporter, taxe, référence, export .ics).
+  Vérification de circonscription par département. Anti double-réservation.
+- **Gestion de RDV sans compte** (`/rdv/gestion`) : retrouver, déplacer ou annuler
+  avec référence + email. Espace personnel optionnel (OTP email) listant les RDV
+  passés et à venir. i18n FR / EN / AR (RTL).
+- **Console employés `/staff`** : RDV en temps réel (référence, filtres, scoping par
+  service), fiche usager, statuts, notes internes, export CSV.
+- **Console admin `/admin`** : **disponibilités par service** (plages hebdomadaires,
+  durée des RDV, guichets, fermetures exceptionnelles), CRUD services / formalités /
+  pièces / taxes, redirections, divisions (import CSV), comptes & rôles, contenu
+  multilingue, branding, tableau de bord, audit log.
+- **Calendly (optionnel, hors parcours)** : OAuth2 + webhooks signés conservés pour
+  une éventuelle transition — voir [`docs/PARCOURS-RDV.md`](docs/PARCOURS-RDV.md).
 
 ## Stack
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Prisma + SQLite (PostgreSQL-ready) ·
-Calendly API v2 · bcryptjs
+bcryptjs
 
 ## Démarrage
 
