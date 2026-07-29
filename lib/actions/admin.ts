@@ -22,6 +22,7 @@ export async function saveService(formData: FormData) {
     active: bool(formData.get("active")),
     contactEmail: str(formData.get("contactEmail")) || null,
     banner: str(formData.get("banner")) || null,
+    formUrl: str(formData.get("formUrl")) || null,
   };
   if (id) {
     await db.service.update({ where: { id }, data });

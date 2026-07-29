@@ -33,12 +33,14 @@ async function main() {
   });
 
   // --- Services ---
+  // formUrl : formulaires PDF officiels servis depuis /public/formulaires
+  // (téléchargeables « en haut de la page » du service, Requirements §04).
   const servicesData = [
     { slug: "passeport", name: "Passeport", icon: "book", order: 1, contactEmail: "passeport.consulat@ambassadeliban.fr" },
     { slug: "etat-civil", name: "Etat Civil", icon: "file-text", order: 2, contactEmail: "etat.civil.consulat@ambassadeliban.fr" },
-    { slug: "visa", name: "Visa", icon: "stamp", order: 3, contactEmail: "visa.consulat@ambassadeliban.fr" },
+    { slug: "visa", name: "Visa", icon: "stamp", order: 3, contactEmail: "visa.consulat@ambassadeliban.fr", formUrl: "/formulaires/formulaire-visa.pdf" },
     { slug: "legalisations-traductions", name: "Légalisations-Traductions", icon: "scroll", order: 4, contactEmail: "leg.trad.consulat@ambassadeliban.fr" },
-    { slug: "procuration", name: "Procuration", icon: "pen-line", order: 5, contactEmail: "procuration.consulat@ambassadeliban.fr" },
+    { slug: "procuration", name: "Procuration", icon: "pen-line", order: 5, contactEmail: "procuration.consulat@ambassadeliban.fr", formUrl: "/formulaires/formulaire-procuration.pdf" },
   ];
   const services = {};
   for (const s of servicesData) {

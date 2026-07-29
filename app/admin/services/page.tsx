@@ -61,6 +61,10 @@ export default async function AdminServicesPage() {
                 <Label>Bandeau affiché sur la page du service</Label>
                 <Textarea name="banner" rows={4} defaultValue={s.banner ?? ""} />
               </div>
+              <div className="sm:col-span-2">
+                <Label>Formulaire téléchargeable (URL du PDF, ex. /formulaires/formulaire-visa.pdf)</Label>
+                <Input name="formUrl" defaultValue={s.formUrl ?? ""} placeholder="/formulaires/…pdf" />
+              </div>
               <div><Button type="submit">Enregistrer</Button></div>
             </form>
           </details>

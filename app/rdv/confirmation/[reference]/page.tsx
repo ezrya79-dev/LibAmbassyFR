@@ -137,6 +137,16 @@ export default async function ConfirmationPage({
                       <li key={d.id}>{d.label}</li>
                     ))}
                   </ul>
+                  {appt.formality.service.formUrl && (
+                    <a
+                      href={appt.formality.service.formUrl}
+                      target="_blank"
+                      rel="noopener"
+                      className="mt-2 inline-block font-medium text-[var(--brand)] underline"
+                    >
+                      {dict.downloadForm}
+                    </a>
+                  )}
                 </dd>
               </div>
             </div>
