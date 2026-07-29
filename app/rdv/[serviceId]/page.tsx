@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Mail } from "lucide-react";
+import { ChevronRight, FileDown, Mail } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
 import { Card } from "@/components/ui";
@@ -23,6 +23,23 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
       <p className="mt-1 text-sm text-stone-500">
         {dict.step} 2/3 — {dict.selectFormality}
       </p>
+
+      {/* Formulaire téléchargeable « en haut de la page », comme sur le
+          portail d'origine (Requirements §04). */}
+      {service.formUrl && (
+        <a
+          href={service.formUrl}
+          target="_blank"
+          rel="noopener"
+          className="mt-4 flex items-center gap-3 rounded-xl border border-[var(--brand)] bg-[var(--brand-light)] p-4 transition-shadow hover:shadow-md"
+        >
+          <FileDown className="h-6 w-6 shrink-0 text-[var(--brand)]" />
+          <div>
+            <div className="font-semibold text-[var(--brand)]">{dict.downloadForm}</div>
+            <div className="text-xs text-stone-600">{dict.downloadFormHint}</div>
+          </div>
+        </a>
+      )}
 
       <div className="mt-6 space-y-3">
         {service.formalities.map((f, i) => (

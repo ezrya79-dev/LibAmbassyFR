@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CheckCircle2, Info, Mail } from "lucide-react";
+import { CheckCircle2, FileDown, Info, Mail } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
 import { getApplicant } from "@/lib/auth";
@@ -45,6 +45,21 @@ export default async function FormalityPage({
             <p>{formality.description}</p>
           </div>
         </Card>
+      )}
+
+      {formality.service.formUrl && (
+        <a
+          href={formality.service.formUrl}
+          target="_blank"
+          rel="noopener"
+          className="mt-4 flex items-center gap-3 rounded-xl border border-[var(--brand)] bg-[var(--brand-light)] p-4 transition-shadow hover:shadow-md"
+        >
+          <FileDown className="h-6 w-6 shrink-0 text-[var(--brand)]" />
+          <div>
+            <div className="font-semibold text-[var(--brand)]">{dict.downloadForm}</div>
+            <div className="text-xs text-stone-600">{dict.downloadFormHint}</div>
+          </div>
+        </a>
       )}
 
       {formality.requiredDocuments.length > 0 && (

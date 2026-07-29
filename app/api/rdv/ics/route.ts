@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     `SUMMARY:${icsEscape(`${entity.name} — ${appt.formality.name}`)}`,
     `LOCATION:${icsEscape(entity.address)}`,
     `DESCRIPTION:${icsEscape(
-      `Référence : ${appt.reference}\nService : ${appt.formality.service.name}\nMerci d'apporter les pièces requises (originaux et copies).`
+      `Référence : ${appt.reference}\nService : ${appt.formality.service.name}\nMerci de vous présenter à l'heure exacte, muni de tous les documents nécessaires (originaux et copies) ainsi que du montant de la taxe consulaire en espèces.`
     )}`,
     "END:VEVENT",
     "END:VCALENDAR",

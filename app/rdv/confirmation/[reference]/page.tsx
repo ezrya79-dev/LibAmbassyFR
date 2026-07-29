@@ -10,7 +10,7 @@ import {
   Settings2,
 } from "lucide-react";
 import { db } from "@/lib/db";
-import { t } from "@/lib/i18n";
+import { getLocale, t } from "@/lib/i18n";
 import { BOOKING_TZ } from "@/lib/booking";
 import { Card } from "@/components/ui";
 
@@ -27,6 +27,20 @@ export default async function ConfirmationPage({
   const { reference } = await params;
   const { t: token } = await searchParams;
   const dict = await t();
+  const locale = await getLocale();
+
+  // Consigne de présentation (heure exacte, documents, taxe en espèces) —
+  // reprise du message historique Calendly (Requirements §10), éditable
+  // depuis /admin/contenu ; repli sur le texte i18n si le bloc n'existe pas.
+  const arrivalNote = await db.contentBlock
+    .findUnique({ where: { key_locale: { key: "rdv.confirmation.note", locale } } })
+    .then(
+      (b) =>
+        b ??
+        db.contentBlock.findUnique({
+          where: { key_locale: { key: "rdv.confirmation.note", locale: "fr" } },
+        })
+    );
 
   const appt = await db.appointment.findUnique({
     where: { reference: decodeURIComponent(reference).toUpperCase() },
@@ -123,6 +137,16 @@ export default async function ConfirmationPage({
                       <li key={d.id}>{d.label}</li>
                     ))}
                   </ul>
+                  {appt.formality.service.formUrl && (
+                    <a
+                      href={appt.formality.service.formUrl}
+                      target="_blank"
+                      rel="noopener"
+                      className="mt-2 inline-block font-medium text-[var(--brand)] underline"
+                    >
+                      {dict.downloadForm}
+                    </a>
+                  )}
                 </dd>
               </div>
             </div>
@@ -138,6 +162,13 @@ export default async function ConfirmationPage({
           )}
         </dl>
       </Card>
+
+      {!canceled && (
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <span className="font-semibold">{dict.importantNote} — </span>
+          {arrivalNote?.body ?? dict.arriveOnTimeNote}
+        </div>
+      )}
 
       {!canceled && (
         <div className="mt-6 flex flex-wrap justify-center gap-3">

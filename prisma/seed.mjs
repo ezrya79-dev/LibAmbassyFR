@@ -33,12 +33,14 @@ async function main() {
   });
 
   // --- Services ---
+  // formUrl : formulaires PDF officiels servis depuis /public/formulaires
+  // (téléchargeables « en haut de la page » du service, Requirements §04).
   const servicesData = [
     { slug: "passeport", name: "Passeport", icon: "book", order: 1, contactEmail: "passeport.consulat@ambassadeliban.fr" },
     { slug: "etat-civil", name: "Etat Civil", icon: "file-text", order: 2, contactEmail: "etat.civil.consulat@ambassadeliban.fr" },
-    { slug: "visa", name: "Visa", icon: "stamp", order: 3, contactEmail: "visa.consulat@ambassadeliban.fr" },
+    { slug: "visa", name: "Visa", icon: "stamp", order: 3, contactEmail: "visa.consulat@ambassadeliban.fr", formUrl: "/formulaires/formulaire-visa.pdf" },
     { slug: "legalisations-traductions", name: "Légalisations-Traductions", icon: "scroll", order: 4, contactEmail: "leg.trad.consulat@ambassadeliban.fr" },
-    { slug: "procuration", name: "Procuration", icon: "pen-line", order: 5, contactEmail: "procuration.consulat@ambassadeliban.fr" },
+    { slug: "procuration", name: "Procuration", icon: "pen-line", order: 5, contactEmail: "procuration.consulat@ambassadeliban.fr", formUrl: "/formulaires/formulaire-procuration.pdf" },
   ];
   const services = {};
   for (const s of servicesData) {
@@ -49,7 +51,9 @@ async function main() {
 
   // --- Disponibilités par défaut (moteur de créneaux natif) ---
   // Ouverture au public 8h30–14h30 : créneaux du lundi au vendredi, 9h–14h.
-  // RDV de 20 min ; 2 guichets pour les passeports (service le plus demandé).
+  // RDV de 30 min, durée observée sur le Calendly historique (Requirements
+  // §10) ; 2 guichets pour les passeports (service le plus demandé).
+  // Le tout reste modifiable dans Admin → Disponibilités.
   for (const s of Object.values(services)) {
     for (let weekday = 1; weekday <= 5; weekday++) {
       await prisma.availabilityRule.create({
@@ -58,7 +62,7 @@ async function main() {
           weekday,
           startMinute: 9 * 60,
           endMinute: 14 * 60,
-          slotMinutes: 20,
+          slotMinutes: 30,
           capacity: s.slug === "passeport" ? 2 : 1,
         },
       });
@@ -221,7 +225,7 @@ async function main() {
     ["apposition-empreintes", "Apposition d'empreintes"],
     ["legalisation-documents-commerciaux", "Légalisation de documents commerciaux"],
     ["legalisation-de-jugement", "Légalisation de jugement"],
-    ["legalisations-traductions-actes-libanais", "Légalisations et traductions d'actes réalisés à l'état civil libanais"],
+    ["legalisations-traductions-actes-libanais", "Légalisations et traductions d'actes relatifs à l'état civil libanais"],
   ];
   let lOrder = 0;
   for (const [slug, name] of legs) {
@@ -235,11 +239,22 @@ async function main() {
     });
   }
 
-  // Procuration
+  // Procuration — liste complète relevée sur le portail d'origine (14 formalités)
   const procs = [
     ["procuration-generale", "Procuration générale"],
     ["procuration-generale-juridique", "Procuration générale juridique"],
     ["procuration-speciale-immobilier", "Procuration spéciale relative aux biens immobiliers et mobiliers"],
+    ["procuration-speciale-juridique", "Procuration spéciale juridique"],
+    ["procuration-speciale-divorce-mariage", "Procuration spéciale de divorce/mariage"],
+    ["procuration-speciale-etat-civil-passeports", "Procuration spéciale relative à l'état civil libanais et aux passeports"],
+    ["annulation-de-procuration", "Annulation de procuration"],
+    ["desistement", "Désistement"],
+    ["affidavit", "Affidavit"],
+    ["engagement", "Engagement"],
+    ["deni-de-propriete", "Déni de propriété (uniquement pour les non-Libanais)"],
+    ["testament", "Testament"],
+    ["autres-formalites-notariales", "Autres formalités notariales"],
+    ["devolution-successorale", "Dévolution Successorale"],
   ];
   let prOrder = 0;
   for (const [slug, name] of procs) {
@@ -292,6 +307,13 @@ async function main() {
     { key: "home.tile.profile", title: "MON ESPACE (OPTIONNEL)", body: "Créez un espace pour retrouver vos rendez-vous passés et à venir et pré-remplir vos démarches." },
     { key: "rdv.intro.steps", title: "Étapes de prise de rendez-vous", body: "1. Sélectionnez le service consulaire concerné.\n2. Choisissez la formalité : la liste des pièces à fournir s'affiche avant toute réservation.\n3. Choisissez un créneau et confirmez : votre rendez-vous n'est enregistré qu'après l'écran de confirmation, qui récapitule adresse, durée, pièces et référence." },
     { key: "rdv.banner", title: "Privilégiez l'email", body: BANNER },
+    // Message historique du Calendly de l'ambassade (Requirements §10),
+    // affiché sur l'écran de confirmation du rendez-vous.
+    {
+      key: "rdv.confirmation.note",
+      title: "Consigne de présentation",
+      body: "Merci de vous présenter à l'heure exacte de votre rendez-vous, muni de tous les documents nécessaires ainsi que du montant de la taxe consulaire en espèces.",
+    },
   ];
   for (const b of blocks) {
     await prisma.contentBlock.create({ data: b });

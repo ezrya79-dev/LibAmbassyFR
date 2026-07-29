@@ -34,6 +34,7 @@ model Service {
   active            Boolean            @default(true)
   contactEmail      String?
   banner            String?
+  formUrl           String? // formulaire PDF téléchargeable (ex. /formulaires/formulaire-visa.pdf)
   formalities       Formality[]
   availabilityRules AvailabilityRule[]
   closedPeriods     ClosedPeriod[]

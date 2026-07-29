@@ -180,7 +180,7 @@ Un formulaire "Etat Civil" est téléchargeable en haut de la page.
 10. Apposition d'empreintes
 11. Légalisation de documents commerciaux
 12. Légalisation de jugement
-13. Légalisations et traductions d'actes réalisés à l'état civil libanais
+13. Légalisations et traductions d'actes relatifs à l'état civil libanais
 
 [À COMPLÉTER : détail des pièces requises et taxes pour chaque formalité]
 
@@ -188,10 +188,23 @@ Un formulaire "Etat Civil" est téléchargeable en haut de la page.
 
 # 07 — Service : Procuration
 
-## Formalités (paramétrable)
+## Formalités (paramétrable) — liste complète relevée sur le portail (captures 29/07/2026)
 1. Procuration générale
 2. Procuration générale juridique
 3. Procuration spéciale relative aux biens immobiliers et mobiliers
+4. Procuration spéciale juridique
+5. Procuration spéciale de divorce/mariage
+6. Procuration spéciale relative à l'état civil libanais et aux passeports
+7. Annulation de procuration
+8. Désistement
+9. Affidavit
+10. Engagement
+11. Déni de propriété (uniquement pour les non-Libanais)
+12. Testament
+13. Autres formalités notariales
+14. Dévolution Successorale
+
+Un formulaire de procuration est téléchargeable (PDF, 3 pages — intégré dans `public/formulaires/`).
 
 [À COMPLÉTER : détail des pièces requises et taxes pour chaque formalité]
 

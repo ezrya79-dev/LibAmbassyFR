@@ -45,6 +45,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/.next ./.next
 COPY next.config.mjs ./
 COPY content ./content
+COPY public ./public
 COPY deploy/entrypoint.sh deploy/seed-if-empty.mjs ./deploy/
 RUN chmod +x deploy/entrypoint.sh && mkdir -p /data/uploads
 
