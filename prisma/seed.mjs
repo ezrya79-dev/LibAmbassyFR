@@ -225,7 +225,7 @@ async function main() {
     ["apposition-empreintes", "Apposition d'empreintes"],
     ["legalisation-documents-commerciaux", "Légalisation de documents commerciaux"],
     ["legalisation-de-jugement", "Légalisation de jugement"],
-    ["legalisations-traductions-actes-libanais", "Légalisations et traductions d'actes réalisés à l'état civil libanais"],
+    ["legalisations-traductions-actes-libanais", "Légalisations et traductions d'actes relatifs à l'état civil libanais"],
   ];
   let lOrder = 0;
   for (const [slug, name] of legs) {
@@ -239,11 +239,22 @@ async function main() {
     });
   }
 
-  // Procuration
+  // Procuration — liste complète relevée sur le portail d'origine (14 formalités)
   const procs = [
     ["procuration-generale", "Procuration générale"],
     ["procuration-generale-juridique", "Procuration générale juridique"],
     ["procuration-speciale-immobilier", "Procuration spéciale relative aux biens immobiliers et mobiliers"],
+    ["procuration-speciale-juridique", "Procuration spéciale juridique"],
+    ["procuration-speciale-divorce-mariage", "Procuration spéciale de divorce/mariage"],
+    ["procuration-speciale-etat-civil-passeports", "Procuration spéciale relative à l'état civil libanais et aux passeports"],
+    ["annulation-de-procuration", "Annulation de procuration"],
+    ["desistement", "Désistement"],
+    ["affidavit", "Affidavit"],
+    ["engagement", "Engagement"],
+    ["deni-de-propriete", "Déni de propriété (uniquement pour les non-Libanais)"],
+    ["testament", "Testament"],
+    ["autres-formalites-notariales", "Autres formalités notariales"],
+    ["devolution-successorale", "Dévolution Successorale"],
   ];
   let prOrder = 0;
   for (const [slug, name] of procs) {
