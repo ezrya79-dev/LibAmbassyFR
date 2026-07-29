@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarCheck, UserPen, Paperclip } from "lucide-react";
+import { CalendarCheck, UserPen, CalendarSearch } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
 
@@ -10,10 +10,12 @@ export default async function HomePage() {
   });
   const get = (key: string) => blocks.find((b) => b.key === key);
 
+  // Le dépôt de documents est reporté à un lot ultérieur : la 3e tuile sert
+  // désormais à retrouver / déplacer / annuler un RDV existant (sans compte).
   const tiles = [
     { block: get("home.tile.rdv"), href: "/rdv", icon: CalendarCheck, fallback: dict.bookAppointment },
+    { block: get("home.tile.gestion"), href: "/rdv/gestion", icon: CalendarSearch, fallback: dict.manageBooking },
     { block: get("home.tile.profile"), href: "/profil", icon: UserPen, fallback: dict.editProfile },
-    { block: get("home.tile.documents"), href: "/documents", icon: Paperclip, fallback: dict.attachDocuments },
   ];
 
   return (

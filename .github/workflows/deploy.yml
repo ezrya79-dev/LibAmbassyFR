@@ -1,0 +1,23 @@
+name: Déploiement LibAmbassyFR
+
+# Même modèle que Solid'Pilot (joe17xe/YCID) : à chaque push sur main (donc à
+# chaque merge de PR), le runner self-hosted installé sur le VPS exécute
+# deploy.sh. Déclenchable aussi à la main depuis l'onglet Actions.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Le runner self-hosted enregistré sur le VPS doit porter ces labels
+    # (voir deploy/setup-runner.sh).
+    runs-on: [self-hosted, libambassyfr]
+    steps:
+      - name: Déployer (pull + build + restart pm2 + vérif)
+        run: sudo -n bash /opt/libambassyfr/deploy/deploy.sh

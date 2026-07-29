@@ -4,7 +4,7 @@ import { CheckCircle2, Info, Mail } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
 import { getApplicant } from "@/lib/auth";
-import { CalendlyEmbed } from "@/components/calendly-embed";
+import { BookingWidget } from "@/components/booking-widget";
 import { Card, Badge } from "@/components/ui";
 
 export default async function FormalityPage({
@@ -14,12 +14,15 @@ export default async function FormalityPage({
 }) {
   const { serviceId, formalityId } = await params;
   const dict = await t();
-  const [formality, applicant] = await Promise.all([
+  const [formality, applicant, hasRules] = await Promise.all([
     db.formality.findUnique({
       where: { id: formalityId },
       include: { requiredDocuments: { orderBy: { order: "asc" } }, service: true },
     }),
     getApplicant(),
+    db.availabilityRule
+      .count({ where: { serviceId, active: true } })
+      .then((n) => n > 0),
   ]);
   if (!formality || formality.serviceId !== serviceId) notFound();
 
@@ -77,14 +80,36 @@ export default async function FormalityPage({
 
       <div className="mt-8">
         <h2 className="mb-3 text-lg font-semibold">{dict.book}</h2>
-        {formality.calendlyUrl ? (
-          <CalendlyEmbed
-            url={formality.calendlyUrl}
+        {hasRules ? (
+          <BookingWidget
+            formalityId={formality.id}
+            serviceId={serviceId}
             prefill={
               applicant
-                ? { name: `${applicant.firstName} ${applicant.lastName}`.trim(), email: applicant.email }
+                ? {
+                    firstName: applicant.firstName,
+                    lastName: applicant.lastName,
+                    email: applicant.email,
+                    phone: applicant.phone ?? undefined,
+                  }
                 : undefined
             }
+            labels={{
+              chooseSlot: dict.chooseSlot,
+              noSlots: dict.noSlots,
+              prevPeriod: dict.prevPeriod,
+              nextPeriod: dict.nextPeriod,
+              yourDetails: dict.yourDetails,
+              firstName: dict.firstName,
+              lastName: dict.lastName,
+              email: dict.email,
+              phone: dict.phone,
+              confirmBooking: dict.confirmBooking,
+              bookingNotDoneYet: dict.bookingNotDoneYet,
+              selectedSlot: dict.selectedSlot,
+              changeSlot: dict.changeSlot,
+              remainingPlaces: dict.remainingPlaces,
+            }}
           />
         ) : (
           <Card className="text-sm text-stone-600">
