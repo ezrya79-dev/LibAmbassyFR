@@ -68,6 +68,8 @@ const dictionaries = {
     selectedSlot: "Créneau sélectionné",
     changeSlot: "Changer de créneau",
     remainingPlaces: "places",
+    arriveOnTimeNote:
+      "Merci de vous présenter à l'heure exacte de votre rendez-vous, muni de tous les documents nécessaires ainsi que du montant de la taxe consulaire en espèces.",
   },
   en: {
     home: "Home",
@@ -134,6 +136,8 @@ const dictionaries = {
     selectedSlot: "Selected slot",
     changeSlot: "Change slot",
     remainingPlaces: "places",
+    arriveOnTimeNote:
+      "Please arrive at the exact time of your appointment, with all required documents and the consular fee amount in cash.",
   },
   ar: {
     home: "الرئيسية",
@@ -200,6 +204,8 @@ const dictionaries = {
     selectedSlot: "الموعد المختار",
     changeSlot: "تغيير الموعد",
     remainingPlaces: "أماكن",
+    arriveOnTimeNote:
+      "يرجى الحضور في الوقت المحدد لموعدك، مع جميع المستندات المطلوبة ومبلغ الرسم القنصلي نقدًا.",
   },
 } as const;
 
