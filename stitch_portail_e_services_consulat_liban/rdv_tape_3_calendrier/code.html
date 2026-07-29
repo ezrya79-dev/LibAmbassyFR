@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-secondary-container": "#fffbff",
+                "lebanese-red": "#EE161F",
+                "primary-fixed": "#a1f5b7",
+                "on-primary-container": "#89dba0",
+                "secondary-fixed-dim": "#ffb4ab",
+                "on-primary-fixed-variant": "#00522a",
+                "background": "#fff8f6",
+                "inverse-surface": "#342f2e",
+                "on-tertiary-fixed-variant": "#7a2c36",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#3f4940",
+                "primary-fixed-dim": "#86d89d",
+                "surface": "#fff8f6",
+                "on-tertiary": "#ffffff",
+                "outline": "#6f7a70",
+                "on-secondary-fixed-variant": "#93000b",
+                "on-primary-fixed": "#00210d",
+                "on-error-container": "#93000a",
+                "primary-container": "#006233",
+                "tertiary-fixed": "#ffdadb",
+                "on-tertiary-container": "#ffb7bb",
+                "cedar-green": "#006233",
+                "inverse-primary": "#86d89d",
+                "secondary-container": "#e80e1c",
+                "surface-container-highest": "#e9e1df",
+                "on-background": "#1e1b1a",
+                "on-primary": "#ffffff",
+                "surface-container": "#f5ecea",
+                "secondary-fixed": "#ffdad6",
+                "inverse-on-surface": "#f8efed",
+                "outline-variant": "#bfc9be",
+                "surface-tint": "#146c3c",
+                "border-muted": "#E7E5E4",
+                "on-tertiary-fixed": "#40010e",
+                "surface-container-low": "#fbf2f0",
+                "surface-container-high": "#efe6e4",
+                "tertiary-fixed-dim": "#ffb2b7",
+                "on-secondary-fixed": "#410002",
+                "tertiary": "#6e232d",
+                "error-container": "#ffdad6",
+                "on-error": "#ffffff",
+                "status-amber": "#B45309",
+                "surface-dim": "#e1d8d6",
+                "on-surface": "#1e1b1a",
+                "surface-gray": "#F5F5F4",
+                "secondary": "#bb0011",
+                "status-blue": "#0055BB",
+                "surface-variant": "#e9e1df",
+                "on-secondary": "#ffffff",
+                "surface-bright": "#fff8f6",
+                "tertiary-container": "#8c3a43",
+                "error": "#ba1a1a",
+                "primary": "#004824"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+              },
+              "spacing": {
+                "margin-desktop": "48px",
+                "touch-target": "44px",
+                "margin-mobile": "16px",
+                "gutter": "16px",
+                "unit": "4px"
+              },
+              "fontFamily": {
+                "body-md": ["notoSans"],
+                "headline-lg-mobile": ["notoSans"],
+                "body-lg": ["notoSans"],
+                "headline-md": ["notoSans"],
+                "arabic-display": ["notoSans"],
+                "headline-lg": ["notoSans"],
+                "label-md": ["notoSans"]
+              },
+              "fontSize": {
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg-mobile": ["26px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "arabic-display": ["28px", {"lineHeight": "44px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-border-muted docked full-width top-0 z-40 sticky">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-touch-target h-16 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-cedar-green text-2xl" data-icon="account_balance">account_balance</span>
+<h1 class="font-headline-md text-headline-md font-bold text-cedar-green">Ambassade du Liban</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-cedar-green font-bold border-b-2 border-cedar-green font-label-md text-label-md" href="#">Accueil</a>
+<a class="text-on-surface-variant hover:bg-surface-container transition-colors font-label-md text-label-md px-2 py-1" href="#">Services</a>
+<a class="text-on-surface-variant hover:bg-surface-container transition-colors font-label-md text-label-md px-2 py-1" href="#">Consulat</a>
+</nav>
+<button class="font-label-md text-label-md text-cedar-green font-bold hover:bg-surface-container px-3 py-1 transition-colors">FR/AR</button>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-20">
+<!-- Progress Stepper -->
+<div class="mb-10 max-w-2xl mx-auto">
+<div class="flex items-center justify-between relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-outline-variant -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-2/3 h-0.5 bg-cedar-green -translate-y-1/2 z-0"></div>
+<div class="z-10 bg-cedar-green text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+<div class="z-10 bg-cedar-green text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+<div class="z-10 bg-cedar-green text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+<div class="z-10 bg-surface border-2 border-outline-variant text-outline w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+</div>
+<div class="flex justify-between mt-2 px-2">
+<span class="text-[10px] md:text-label-md font-label-md text-cedar-green">Service</span>
+<span class="text-[10px] md:text-label-md font-label-md text-cedar-green">Informations</span>
+<span class="text-[10px] md:text-label-md font-label-md text-cedar-green">Créneau</span>
+<span class="text-[10px] md:text-label-md font-label-md text-on-surface-variant">Confirmation</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Formalité Details -->
+<div class="lg:col-span-5 space-y-6">
+<section class="bg-surface-container-low p-6 rounded-xl border border-border-muted shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-cedar-green" data-icon="passport">downloading</span>
+<h2 class="font-headline-md text-headline-md text-cedar-green">Renouvellement de passeport</h2>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6">
+                        Veuillez vous assurer d'apporter tous les documents originaux le jour de votre rendez-vous pour éviter tout retard dans le traitement de votre demande.
+                    </p>
+<div class="space-y-4">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Checklist des pièces requises</h3>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-cedar-green mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="font-body-md">Original de la carte d'identité libanaise ou extrait d'acte de naissance.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-cedar-green mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="font-body-md">Deux photos d'identité récentes (fond blanc, 3.5 x 4.5 cm).</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-cedar-green mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="font-body-md">Justificatif de domicile en France (facture EDF, quittance).</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-cedar-green mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="font-body-md">Ancien passeport (en cas de renouvellement).</span>
+</li>
+</ul>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant">
+<div class="flex justify-between items-center bg-primary-container/10 p-4 rounded-lg">
+<div>
+<h4 class="font-label-md text-label-md text-cedar-green">Taxe Consulaire</h4>
+<p class="text-on-surface-variant text-sm">Paiement sur place</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-cedar-green">88 €</span>
+<p class="text-[10px] text-on-surface-variant">espèces ou CB</p>
+</div>
+</div>
+</div>
+</section>
+<div class="hidden lg:block">
+<img class="w-full h-48 object-cover rounded-xl border border-border-muted shadow-sm" data-alt="A serene, high-end photograph of the Lebanese Embassy architecture in Paris, featuring classic limestone facades with clean institutional branding. The lighting is soft morning sunlight, creating a prestigious and reliable atmosphere. The composition is minimalist and structured, reflecting a sense of public order and administrative efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhzSvhLE6JyeravT2SVJyvB46Y0uUso7Pe8b9y_XjBuTTFo8Uu1gOPVL2ArnLq4cDqaa6qB30MK2aNHTiY6Ml9QMi_InExIDPZSnqR1kBpxy8K7cRasHaJSIWC6c7UnFi9HuEIgywM4N-ZMNwGrsdSU88mUCGRqrOtDzwWg9WvqypPJOKa_ZWveyEUBWH1f59ozGbRunmFEcm_6ng0hjygf8MVCggmLypGZLeCVTubBMjmBdeCW53-3g"/>
+</div>
+</div>
+<!-- Right Column: Calendar Widget -->
+<div class="lg:col-span-7">
+<section class="bg-surface-container-lowest p-6 md:p-8 rounded-xl border border-border-muted shadow-sm">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+<h2 class="font-headline-md text-headline-md text-on-surface">Sélectionnez un créneau</h2>
+<div class="flex items-center bg-surface-container p-1 rounded-full">
+<button class="px-4 py-1 rounded-full bg-cedar-green text-on-primary font-label-md text-label-md">Matin</button>
+<button class="px-4 py-1 rounded-full text-on-surface-variant font-label-md text-label-md">Après-midi</button>
+</div>
+</div>
+<!-- Calendar Grid (Simplified View) -->
+<div class="mb-8">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-md text-label-md font-bold">Octobre 2024</span>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-2 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+<div class="calendar-grid text-center font-label-md text-on-surface-variant mb-2">
+<div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
+</div>
+<div class="calendar-grid gap-2 text-center font-body-md">
+<!-- Placeholder dates -->
+<div class="p-2 text-outline-variant">27</div>
+<div class="p-2 text-outline-variant">28</div>
+<div class="p-2 text-outline-variant">29</div>
+<div class="p-2 text-outline-variant">30</div>
+<button class="p-2 hover:bg-surface-container rounded-lg border border-transparent">1</button>
+<button class="p-2 text-outline-variant">2</button>
+<button class="p-2 text-outline-variant">3</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">4</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">5</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">6</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">7</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">8</button>
+<button class="p-2 text-outline-variant">9</button>
+<button class="p-2 text-outline-variant">10</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">11</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">12</button>
+<button class="p-2 bg-cedar-green text-on-primary rounded-lg font-bold">13</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">14</button>
+<button class="p-2 hover:bg-surface-container rounded-lg">15</button>
+<button class="p-2 text-outline-variant">16</button>
+<button class="p-2 text-outline-variant">17</button>
+</div>
+</div>
+<!-- Time Slots -->
+<div class="space-y-4">
+<h3 class="font-label-md text-label-md text-on-surface-variant">Horaires disponibles pour le 13 Octobre</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:border-cedar-green transition-colors">09:00</button>
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:border-cedar-green transition-colors">09:30</button>
+<button class="py-3 px-4 bg-primary-container text-white border border-cedar-green rounded-lg font-label-md text-label-md">10:00</button>
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:border-cedar-green transition-colors">10:30</button>
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:border-cedar-green transition-colors">11:00</button>
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md opacity-50 cursor-not-allowed bg-surface-gray">11:30</button>
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:border-cedar-green transition-colors">12:00</button>
+<button class="py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:border-cedar-green transition-colors">12:30</button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-10 flex flex-col md:flex-row gap-4 items-center justify-between">
+<button class="text-cedar-green font-label-md text-label-md font-bold px-6 py-3 h-touch-target hover:bg-surface-container-high rounded-full transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+                            Étape précédente
+                        </button>
+<button class="w-full md:w-auto bg-cedar-green text-on-primary font-label-md text-label-md font-bold px-10 py-3 h-touch-target rounded-full shadow-md hover:brightness-110 active:scale-95 transition-all">
+                            Confirmer le rendez-vous
+                        </button>
+</div>
+</section>
+<div class="mt-6 flex items-start gap-3 p-4 bg-status-amber/10 rounded-lg border border-status-amber/20">
+<span class="material-symbols-outlined text-status-amber" data-icon="info">info</span>
+<p class="text-sm text-status-amber leading-tight">
+<strong>Note :</strong> Une fois confirmé, vous recevrez un email de confirmation avec votre convocation. Merci de le présenter à l'accueil de l'ambassade.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-border-muted w-full mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-mobile md:px-margin-desktop py-8 max-w-7xl mx-auto items-center">
+<div class="text-center md:text-left">
+<p class="font-headline-md text-headline-md font-bold text-cedar-green mb-2">Ambassade du Liban</p>
+<p class="font-body-md text-body-md text-on-surface-variant">© 2024 Ambassade du Liban à Paris. Tous droits réservés.</p>
+</div>
+<div class="flex flex-wrap justify-center md:justify-end gap-6">
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline decoration-cedar-green transition-opacity opacity-80 hover:opacity-100" href="#">Mentions Légales</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline decoration-cedar-green transition-opacity opacity-80 hover:opacity-100" href="#">Confidentialité</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline decoration-cedar-green transition-opacity opacity-80 hover:opacity-100" href="#">Contact</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline decoration-cedar-green transition-opacity opacity-80 hover:opacity-100" href="#">Plan du site</a>
+</div>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 md:hidden bg-surface border-t border-border-muted z-50 shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-cedar-green" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Accueil</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 scale-95 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Mes RDV</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-cedar-green" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profil</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-cedar-green" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for date selection
+        document.querySelectorAll('.calendar-grid button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.classList.contains('text-outline-variant')) {
+                    document.querySelectorAll('.calendar-grid button').forEach(b => {
+                        b.classList.remove('bg-cedar-green', 'text-on-primary', 'font-bold');
+                        if (!b.classList.contains('text-outline-variant')) {
+                             b.classList.add('hover:bg-surface-container');
+                        }
+                    });
+                    this.classList.add('bg-cedar-green', 'text-on-primary', 'font-bold');
+                    this.classList.remove('hover:bg-surface-container');
+                }
+            });
+        });
+
+        // Simple micro-interaction for time slot selection
+        document.querySelectorAll('.grid button').forEach(btn => {
+            if (btn.innerText.includes(':')) {
+                btn.addEventListener('click', function() {
+                    if (!this.classList.contains('opacity-50')) {
+                        document.querySelectorAll('.grid button').forEach(b => {
+                            if (b.innerText.includes(':') && !b.classList.contains('opacity-50')) {
+                                b.classList.remove('bg-primary-container', 'text-white', 'border-cedar-green');
+                                b.classList.add('border-outline');
+                            }
+                        });
+                        this.classList.add('bg-primary-container', 'text-white', 'border-cedar-green');
+                        this.classList.remove('border-outline');
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

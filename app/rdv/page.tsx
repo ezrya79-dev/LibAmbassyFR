@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Book, FileText, Stamp, ScrollText, PenLine, AlertTriangle } from "lucide-react";
+import { Book, FileText, Stamp, ScrollText, PenLine, ChevronRight, AlertTriangle } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
 import { DepartmentGate } from "@/components/department-gate";
-import { Card } from "@/components/ui";
+import { Stepper } from "@/components/stepper";
 
 const ICONS: Record<string, typeof Book> = {
   book: Book,
@@ -23,15 +23,19 @@ export default async function RdvPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="text-2xl font-bold">{dict.bookAppointment}</h1>
-      <p className="mt-1 text-sm text-stone-500">
-        {dict.step} 1/3 — {dict.selectService}
-      </p>
+      <Stepper current={1} />
 
-      {intro && (
-        <Card className="mt-6 border-l-4 border-l-[var(--brand)]">
-          <div className="whitespace-pre-line text-sm text-stone-600">{intro.body}</div>
-        </Card>
+      <h1 className="text-center text-3xl font-bold text-primary">{dict.bookAppointment}</h1>
+      <p className="mt-2 text-center text-on-surface-variant">{dict.selectService}</p>
+
+      {rules.length > 0 && (
+        <div className="mt-6 flex gap-3 rounded-xl border border-status-amber/30 bg-amber-50 p-4 text-sm">
+          <AlertTriangle className="h-5 w-5 shrink-0 text-status-amber" />
+          <div className="text-amber-900">
+            <span className="font-semibold">{dict.importantNote} — </span>
+            {rules[0].message}
+          </div>
+        </div>
       )}
 
       <div className="mt-6">
@@ -43,35 +47,30 @@ export default async function RdvPage() {
             checkDepartment: dict.checkDepartment,
           }}
         >
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-3">
             {services.map((s) => {
               const Icon = ICONS[s.icon ?? ""] ?? FileText;
               return (
                 <Link
                   key={s.id}
                   href={`/rdv/${s.id}`}
-                  className="flex items-center gap-4 rounded-xl border border-stone-200 bg-white p-5 shadow-sm transition-all hover:border-[var(--brand)] hover:shadow-md"
+                  className="flex min-h-[72px] items-center gap-4 rounded-xl border border-border-muted bg-white p-5 transition-all hover:border-primary hover:shadow-sm"
                 >
-                  <Icon className="h-8 w-8 shrink-0 text-[var(--brand)]" strokeWidth={1.5} />
-                  <span className="font-semibold">{s.name}</span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-light">
+                    <Icon className="h-6 w-6 text-primary" strokeWidth={1.75} />
+                  </span>
+                  <span className="flex-1 text-lg font-semibold">{s.name}</span>
+                  <ChevronRight className="h-5 w-5 text-outline" />
                 </Link>
               );
             })}
           </div>
+
+          {intro && (
+            <p className="mt-6 whitespace-pre-line text-center text-sm text-outline">{intro.body}</p>
+          )}
         </DepartmentGate>
       </div>
-
-      {rules.length > 0 && (
-        <Card className="mt-8 border-amber-200 bg-amber-50">
-          <div className="flex gap-3">
-            <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" />
-            <div className="text-sm text-amber-900">
-              <div className="font-semibold">{dict.importantNote}</div>
-              <p className="mt-1">{rules[0].message}</p>
-            </div>
-          </div>
-        </Card>
-      )}
     </div>
   );
 }

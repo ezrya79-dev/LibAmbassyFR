@@ -13,6 +13,7 @@ import { db } from "@/lib/db";
 import { getLocale, t } from "@/lib/i18n";
 import { BOOKING_TZ } from "@/lib/booking";
 import { Card } from "@/components/ui";
+import { Stepper } from "@/components/stepper";
 
 // Écran final du parcours : c'est ICI (et seulement ici) que l'usager reçoit
 // le récapitulatif complet — date, durée, adresse, pièces à apporter, taxe,
@@ -73,6 +74,7 @@ export default async function ConfirmationPage({
 
   return (
     <div className="mx-auto max-w-2xl">
+      <Stepper current={4} />
       <div className="mb-6 text-center">
         <CheckCircle2
           className={`mx-auto h-14 w-14 ${canceled ? "text-stone-300" : "text-[var(--brand)]"}`}

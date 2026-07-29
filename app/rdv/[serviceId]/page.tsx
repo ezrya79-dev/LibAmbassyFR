@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, FileDown, Mail } from "lucide-react";
+import { ChevronRight, FileDown, Info, Mail } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
-import { Card } from "@/components/ui";
+import { Stepper } from "@/components/stepper";
 
 export default async function ServicePage({ params }: { params: Promise<{ serviceId: string }> }) {
   const { serviceId } = await params;
@@ -14,15 +14,20 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
   });
   if (!service) notFound();
 
+  // Notes communes éventuelles du service (ex. procurations) — contenu éditorial paramétrable
+  const notes = await db.contentBlock.findUnique({
+    where: { key_locale: { key: `service.${service.slug}.notes`, locale: "fr" } },
+  });
+
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/rdv" className="text-sm text-stone-500 hover:underline">
+      <Stepper current={2} />
+
+      <Link href="/rdv" className="text-sm text-outline hover:underline">
         ← {dict.back}
       </Link>
-      <h1 className="mt-2 text-2xl font-bold">{service.name}</h1>
-      <p className="mt-1 text-sm text-stone-500">
-        {dict.step} 2/3 — {dict.selectFormality}
-      </p>
+      <h1 className="mt-2 text-center text-3xl font-bold text-primary">{service.name}</h1>
+      <p className="mt-2 text-center text-on-surface-variant">{dict.selectFormality}</p>
 
       {/* Formulaire téléchargeable « en haut de la page », comme sur le
           portail d'origine (Requirements §04). */}
@@ -31,12 +36,12 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
           href={service.formUrl}
           target="_blank"
           rel="noopener"
-          className="mt-4 flex items-center gap-3 rounded-xl border border-[var(--brand)] bg-[var(--brand-light)] p-4 transition-shadow hover:shadow-md"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-primary bg-brand-light p-4 transition-shadow hover:shadow-sm"
         >
-          <FileDown className="h-6 w-6 shrink-0 text-[var(--brand)]" />
+          <FileDown className="h-6 w-6 shrink-0 text-primary" />
           <div>
-            <div className="font-semibold text-[var(--brand)]">{dict.downloadForm}</div>
-            <div className="text-xs text-stone-600">{dict.downloadFormHint}</div>
+            <div className="font-semibold text-primary">{dict.downloadForm}</div>
+            <div className="text-xs text-on-surface-variant">{dict.downloadFormHint}</div>
           </div>
         </a>
       )}
@@ -46,29 +51,41 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
           <Link
             key={f.id}
             href={`/rdv/${service.id}/${f.id}`}
-            className="flex items-center justify-between rounded-xl border border-stone-200 bg-white p-5 shadow-sm transition-all hover:border-[var(--brand)] hover:shadow-md"
+            className="flex min-h-[72px] items-center justify-between rounded-xl border border-border-muted bg-white p-5 transition-all hover:border-primary hover:shadow-sm"
           >
             <div className="flex items-center gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--brand-light)] text-sm font-bold text-[var(--brand)]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-light text-sm font-bold text-primary">
                 {i + 1}
               </span>
               <div>
-                <div className="font-medium">{f.name}</div>
-                {f.taxDetail && <div className="text-xs text-stone-500">{dict.consularTax} : {f.taxDetail}</div>}
+                <div className="font-semibold">{f.name}</div>
+                {f.taxDetail && (
+                  <div className="mt-0.5 text-xs text-on-surface-variant">
+                    {dict.consularTax} : {f.taxDetail}
+                  </div>
+                )}
               </div>
             </div>
-            <ChevronRight className="h-5 w-5 text-stone-400" />
+            <ChevronRight className="h-5 w-5 shrink-0 text-outline" />
           </Link>
         ))}
       </div>
 
-      {service.banner && (
-        <Card className="mt-8 border-blue-200 bg-blue-50">
-          <div className="flex gap-3">
-            <Mail className="h-5 w-5 shrink-0 text-blue-600" />
-            <div className="whitespace-pre-line text-sm text-blue-900">{service.banner}</div>
+      {notes && (
+        <div className="mt-8 flex gap-3 rounded-xl border border-status-amber/30 bg-amber-50 p-5">
+          <Info className="h-5 w-5 shrink-0 text-status-amber" />
+          <div>
+            <div className="text-sm font-semibold text-amber-900">{notes.title ?? dict.importantNote}</div>
+            <div className="mt-1 whitespace-pre-line text-sm text-amber-900">{notes.body}</div>
           </div>
-        </Card>
+        </div>
+      )}
+
+      {service.banner && (
+        <div className="mt-6 flex gap-3 rounded-xl border border-status-blue/20 bg-blue-50 p-5">
+          <Mail className="h-5 w-5 shrink-0 text-status-blue" />
+          <div className="whitespace-pre-line text-sm text-blue-900">{service.banner}</div>
+        </div>
       )}
     </div>
   );

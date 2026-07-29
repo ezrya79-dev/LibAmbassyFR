@@ -1,10 +1,22 @@
 import Link from "next/link";
+import { Noto_Sans, Noto_Sans_Arabic } from "next/font/google";
 import { Cedar } from "@/components/cedar";
 import { db } from "@/lib/db";
 import { getLocale, t, dir, type Locale } from "@/lib/i18n";
 import { getStaffUser, getApplicant } from "@/lib/auth";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import "./globals.css";
+
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-noto",
+});
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "600", "700"],
+  variable: "--font-arabic",
+});
 
 export const metadata = {
   title: "Ambassade du Liban à Paris — e-services",
@@ -19,7 +31,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const applicant = await getApplicant();
 
   return (
-    <html lang={locale} dir={dir(locale)}>
+    <html lang={locale} dir={dir(locale)} className={`${notoSans.variable} ${notoArabic.variable}`}>
       <body className="flex min-h-screen flex-col">
         <header className="border-b border-stone-200 bg-white">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">

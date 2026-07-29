@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ambassade du Liban à Paris - Portail Public</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary-container": "#fffbff",
+                "lebanese-red": "#EE161F",
+                "primary-fixed": "#a1f5b7",
+                "on-primary-container": "#89dba0",
+                "secondary-fixed-dim": "#ffb4ab",
+                "on-primary-fixed-variant": "#00522a",
+                "background": "#fff8f6",
+                "inverse-surface": "#342f2e",
+                "on-tertiary-fixed-variant": "#7a2c36",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#3f4940",
+                "primary-fixed-dim": "#86d89d",
+                "surface": "#fff8f6",
+                "on-tertiary": "#ffffff",
+                "outline": "#6f7a70",
+                "on-secondary-fixed-variant": "#93000b",
+                "on-primary-fixed": "#00210d",
+                "on-error-container": "#93000a",
+                "primary-container": "#006233",
+                "tertiary-fixed": "#ffdadb",
+                "on-tertiary-container": "#ffb7bb",
+                "cedar-green": "#006233",
+                "inverse-primary": "#86d89d",
+                "secondary-container": "#e80e1c",
+                "surface-container-highest": "#e9e1df",
+                "on-background": "#1e1b1a",
+                "on-primary": "#ffffff",
+                "surface-container": "#f5ecea",
+                "secondary-fixed": "#ffdad6",
+                "inverse-on-surface": "#f8efed",
+                "outline-variant": "#bfc9be",
+                "surface-tint": "#146c3c",
+                "border-muted": "#E7E5E4",
+                "on-tertiary-fixed": "#40010e",
+                "surface-container-low": "#fbf2f0",
+                "surface-container-high": "#efe6e4",
+                "tertiary-fixed-dim": "#ffb2b7",
+                "on-secondary-fixed": "#410002",
+                "tertiary": "#6e232d",
+                "error-container": "#ffdad6",
+                "on-error": "#ffffff",
+                "status-amber": "#B45309",
+                "surface-dim": "#e1d8d6",
+                "on-surface": "#1e1b1a",
+                "surface-gray": "#F5F5F4",
+                "secondary": "#bb0011",
+                "status-blue": "#0055BB",
+                "surface-variant": "#e9e1df",
+                "on-secondary": "#ffffff",
+                "surface-bright": "#fff8f6",
+                "tertiary-container": "#8c3a43",
+                "error": "#ba1a1a",
+                "primary": "#004824"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "margin-desktop": "48px",
+                "touch-target": "44px",
+                "margin-mobile": "16px",
+                "gutter": "16px",
+                "unit": "4px"
+            },
+            "fontFamily": {
+                "body-md": ["Noto Sans"],
+                "headline-lg-mobile": ["Noto Sans"],
+                "body-lg": ["Noto Sans"],
+                "headline-md": ["Noto Sans"],
+                "arabic-display": ["Noto Sans"],
+                "headline-lg": ["Noto Sans"],
+                "label-md": ["Noto Sans"]
+            },
+            "fontSize": {
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg-mobile": ["26px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "arabic-display": ["28px", {"lineHeight": "44px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Noto Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .bento-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-border-muted fixed top-0 w-full z-50 h-touch-target flex justify-between items-center px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-cedar-green text-headline-md" data-icon="account_balance">account_balance</span>
+<h1 class="font-headline-md text-headline-md font-bold text-cedar-green">Ambassade du Liban</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-cedar-green font-bold border-b-2 border-cedar-green font-label-md text-label-md" href="#">Accueil</a>
+<a class="text-on-surface-variant hover:bg-surface-container transition-colors px-2 py-1 rounded font-label-md text-label-md" href="#">Consulat</a>
+<a class="text-on-surface-variant hover:bg-surface-container transition-colors px-2 py-1 rounded font-label-md text-label-md" href="#">Actualités</a>
+</nav>
+<button class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container px-3 py-1 rounded transition-colors">FR/AR</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-16 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto w-full">
+<!-- Hero / Welcome Section -->
+<section class="mb-12">
+<div class="relative overflow-hidden rounded-xl h-64 md:h-80 bg-cedar-green flex items-center p-8 md:p-12 mb-8">
+<!-- Background visual decoration -->
+<div class="absolute right-0 top-0 h-full w-1/3 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[300px]" data-icon="account_balance" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div class="relative z-10 max-w-2xl">
+<h2 class="text-white font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-4">Bienvenue sur le portail consulaire</h2>
+<p class="text-primary-fixed font-body-lg text-body-lg opacity-90">Accédez en toute sécurité à vos démarches administratives et gérez vos rendez-vous officiels auprès de l'Ambassade du Liban à Paris.</p>
+</div>
+</div>
+</section>
+<!-- Bento Grid / Action Tiles -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Tile 1: Prise de RDV -->
+<a class="bento-card group bg-surface-container-low border border-border-muted p-8 rounded-xl flex flex-col justify-between min-h-[220px]" href="#">
+<div>
+<div class="w-12 h-12 rounded-lg bg-cedar-green/10 flex items-center justify-center mb-6 group-hover:bg-cedar-green group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-cedar-green group-hover:text-white" data-icon="calendar_today">calendar_today</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Prise de RDV</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">Planifiez votre visite pour les services de passeport, légalisation ou visa.</p>
+</div>
+<div class="mt-4 flex items-center text-cedar-green font-label-md text-label-md">
+                    Réserver maintenant
+                    <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</a>
+<!-- Tile 2: Profil -->
+<a class="bento-card group bg-surface-container-low border border-border-muted p-8 rounded-xl flex flex-col justify-between min-h-[220px]" href="#">
+<div>
+<div class="w-12 h-12 rounded-lg bg-cedar-green/10 flex items-center justify-center mb-6 group-hover:bg-cedar-green group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-cedar-green group-hover:text-white" data-icon="person_outline">person_outline</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Modifiez votre profil</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">Mettez à jour vos coordonnées personnelles et gérez vos préférences.</p>
+</div>
+<div class="mt-4 flex items-center text-cedar-green font-label-md text-label-md">
+                    Gérer mon compte
+                    <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</a>
+<!-- Tile 3: Documents -->
+<a class="bento-card group bg-surface-container-low border border-border-muted p-8 rounded-xl flex flex-col justify-between min-h-[220px]" href="#">
+<div>
+<div class="w-12 h-12 rounded-lg bg-cedar-green/10 flex items-center justify-center mb-6 group-hover:bg-cedar-green group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-cedar-green group-hover:text-white" data-icon="upload_file">upload_file</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Attachez vos documents</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">Téléversez les pièces justificatives nécessaires à l'instruction de votre dossier.</p>
+</div>
+<div class="mt-4 flex items-center text-cedar-green font-label-md text-label-md">
+                    Espace documentaire
+                    <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</a>
+</section>
+<!-- Information Alert -->
+<section class="mt-12">
+<div class="bg-surface-container-highest border-l-4 border-cedar-green p-6 flex items-start gap-4">
+<span class="material-symbols-outlined text-cedar-green mt-1" data-icon="info">info</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Avis Important</p>
+<p class="font-body-md text-body-md text-on-surface">Veuillez vous assurer que tous vos documents originaux sont prêts avant votre rendez-vous. Tout dossier incomplet pourra entraîner un report de votre démarche.</p>
+</div>
+</div>
+</section>
+<!-- Subtle Visual Separator -->
+<div class="my-16 h-48 rounded-2xl relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A serene and minimalist architectural photograph of a modern institutional building in Paris, featuring clean stone lines and a soft afternoon golden-hour light that emphasizes a professional and trustworthy atmosphere. The color palette is dominated by elegant cream stones and dark green accents, reflecting a premium public service aesthetic. The mood is calm, orderly, and deeply respectful." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDq_K3e47G3v1oMnkZjYC4rBCG-2JzV4DY3DjN5GdORMXxqcOzAXmqm4wHaWCI4zezjMPjRNPkPsJGLdEzG1sPRBF_9_owTj7I-qiKpZmBYjShFtMbwqSW1tRdKuVKrj3fq3ikcMkIh15gyUtMoQ2OgJ3q2gKXqVMBkVOyNpVgrTbJggnT6zWbqWPU34Sn3JJFoaHf0KVrmR4uSzv4X-wB2o5Mykf01ab6GXlZlb-wjHn-E7gR9eUTwXQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent flex items-center p-12">
+<p class="text-white font-headline-md text-headline-md max-w-md italic">"Servir la nation, accompagner les citoyens."</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-border-muted w-full mt-auto">
+<div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-12 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-4">
+<h4 class="font-headline-md text-headline-md font-bold text-cedar-green">Ambassade du Liban à Paris</h4>
+<div class="flex items-start gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<address class="not-italic">
+                        123 Rue de l'Ambassade, 75016 Paris<br/>
+                        France
+                    </address>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+<span>+33 1 40 67 75 75</span>
+</div>
+</div>
+<div class="flex flex-col md:items-end justify-between gap-8">
+<div class="flex flex-wrap md:justify-end gap-6">
+<a class="text-on-surface-variant hover:underline decoration-cedar-green font-label-md text-label-md transition-opacity opacity-80 hover:opacity-100" href="#">Mentions Légales</a>
+<a class="text-on-surface-variant hover:underline decoration-cedar-green font-label-md text-label-md transition-opacity opacity-80 hover:opacity-100" href="#">Confidentialité</a>
+<a class="text-on-surface-variant hover:underline decoration-cedar-green font-label-md text-label-md transition-opacity opacity-80 hover:opacity-100" href="#">Contact</a>
+<a class="text-on-surface-variant hover:underline decoration-cedar-green font-label-md text-label-md transition-opacity opacity-80 hover:opacity-100" href="#">Plan du site</a>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md opacity-60">© 2024 Ambassade du Liban à Paris. Tous droits réservés.</p>
+</div>
+</div>
+</footer>
+<!-- Mobile Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 z-50 bg-surface border-t border-border-muted shadow-lg">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 scale-95 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-[10px]">Accueil</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-cedar-green" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-[10px]">Mes RDV</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-cedar-green" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-[10px]">Profil</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-cedar-green" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-label-md text-[10px]">Support</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for accessibility and states
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = '';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    </script>
+</body></html>

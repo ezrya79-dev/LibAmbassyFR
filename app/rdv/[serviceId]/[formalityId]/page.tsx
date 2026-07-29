@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CheckCircle2, FileDown, Info, Mail } from "lucide-react";
+import { CheckCircle2, FileDown, Info, Mail, Banknote } from "lucide-react";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n";
 import { getApplicant } from "@/lib/auth";
 import { BookingWidget } from "@/components/booking-widget";
-import { Card, Badge } from "@/components/ui";
+import { Stepper } from "@/components/stepper";
 
 export default async function FormalityPage({
   params,
@@ -30,63 +30,69 @@ export default async function FormalityPage({
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href={`/rdv/${serviceId}`} className="text-sm text-stone-500 hover:underline">
+      <Stepper current={3} />
+
+      <Link href={`/rdv/${serviceId}`} className="text-sm text-outline hover:underline">
         ← {dict.back} ({formality.service.name})
       </Link>
-      <h1 className="mt-2 text-2xl font-bold">{formality.name}</h1>
-      <p className="mt-1 text-sm text-stone-500">
-        {dict.step} 3/3 — {dict.calendarStep}
-      </p>
+      <h1 className="mt-2 text-center text-2xl font-bold text-primary sm:text-3xl">{formality.name}</h1>
+      <p className="mt-2 text-center text-on-surface-variant">{dict.calendarStep}</p>
 
       {formality.description?.includes("[À COMPLÉTER]") && (
-        <Card className="mt-4 border-amber-200 bg-amber-50">
-          <div className="flex gap-3 text-sm text-amber-900">
-            <Info className="h-5 w-5 shrink-0" />
-            <p>{formality.description}</p>
-          </div>
-        </Card>
+        <div className="mt-4 flex gap-3 rounded-xl border border-status-amber/30 bg-amber-50 p-4 text-sm text-amber-900">
+          <Info className="h-5 w-5 shrink-0 text-status-amber" />
+          <p>{formality.description}</p>
+        </div>
       )}
 
+      {/* Formulaire téléchargeable « en haut de la page » (Requirements §04). */}
       {formality.service.formUrl && (
         <a
           href={formality.service.formUrl}
           target="_blank"
           rel="noopener"
-          className="mt-4 flex items-center gap-3 rounded-xl border border-[var(--brand)] bg-[var(--brand-light)] p-4 transition-shadow hover:shadow-md"
+          className="mt-4 flex items-center gap-3 rounded-xl border border-primary bg-brand-light p-4 transition-shadow hover:shadow-sm"
         >
-          <FileDown className="h-6 w-6 shrink-0 text-[var(--brand)]" />
+          <FileDown className="h-6 w-6 shrink-0 text-primary" />
           <div>
-            <div className="font-semibold text-[var(--brand)]">{dict.downloadForm}</div>
-            <div className="text-xs text-stone-600">{dict.downloadFormHint}</div>
+            <div className="font-semibold text-primary">{dict.downloadForm}</div>
+            <div className="text-xs text-on-surface-variant">{dict.downloadFormHint}</div>
           </div>
         </a>
       )}
 
       {formality.requiredDocuments.length > 0 && (
-        <Card className="mt-6">
-          <h2 className="font-semibold">{dict.requiredDocs}</h2>
-          <ul className="mt-3 space-y-2">
+        <div className="mt-6 rounded-xl border border-border-muted bg-white p-6">
+          <h2 className="font-semibold text-primary">{dict.requiredDocs}</h2>
+          <ul className="mt-4 space-y-3">
             {formality.requiredDocuments.map((d) => (
-              <li key={d.id} className="flex gap-2 text-sm">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand)]" />
+              <li key={d.id} className="flex gap-3 text-sm">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary-container" />
                 <span>{d.label}</span>
               </li>
             ))}
           </ul>
-        </Card>
+        </div>
       )}
 
       {formality.content && (
-        <Card className="prose-content mt-4">
-          <div className="whitespace-pre-line text-sm text-stone-700">{formality.content}</div>
-        </Card>
+        <div className="prose-content mt-4 rounded-xl border border-border-muted bg-white p-6">
+          <div className="whitespace-pre-line text-sm text-on-surface-variant">{formality.content}</div>
+        </div>
       )}
 
       {(formality.taxDetail || formality.emailContact) && (
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          {formality.taxDetail && <Badge tone="green">{dict.consularTax} : {formality.taxDetail}</Badge>}
+          {formality.taxDetail && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-light px-3 py-1 text-sm font-medium text-primary">
+              <Banknote className="h-4 w-4" /> {dict.consularTax} : {formality.taxDetail}
+            </span>
+          )}
           {formality.emailContact && (
-            <a href={`mailto:${formality.emailContact}`} className="inline-flex items-center gap-1 text-sm text-stone-600 hover:underline">
+            <a
+              href={`mailto:${formality.emailContact}`}
+              className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:underline"
+            >
               <Mail className="h-4 w-4" /> {formality.emailContact}
             </a>
           )}
@@ -127,7 +133,7 @@ export default async function FormalityPage({
             }}
           />
         ) : (
-          <Card className="text-sm text-stone-600">
+          <div className="rounded-xl border border-border-muted bg-white p-6 text-sm text-on-surface-variant">
             {hasContent
               ? "La prise de rendez-vous en ligne pour cette formalité sera bientôt disponible. Merci de contacter le service par email."
               : "Merci de contacter le service par email pour cette formalité."}
@@ -139,7 +145,7 @@ export default async function FormalityPage({
                 </a>
               </>
             )}
-          </Card>
+          </div>
         )}
       </div>
     </div>

@@ -1,14 +1,37 @@
 @import "tailwindcss";
 
+@theme {
+  /* Diplomatic Assurance — design system Stitch */
+  --color-surface: #fff8f6;
+  --color-surface-container-low: #fbf2f0;
+  --color-surface-container: #f5ecea;
+  --color-surface-container-high: #efe6e4;
+  --color-on-surface: #1e1b1a;
+  --color-on-surface-variant: #3f4940;
+  --color-outline: #6f7a70;
+  --color-outline-variant: #bfc9be;
+  --color-primary: #004824;
+  --color-primary-container: #006233;
+  --color-on-primary: #ffffff;
+  --color-primary-fixed: #a1f5b7;
+  --color-secondary: #bb0011;
+  --color-status-blue: #0055bb;
+  --color-status-amber: #b45309;
+  --color-border-muted: #e7e5e4;
+  --color-surface-gray: #f5f5f4;
+  --color-brand-light: #e6f4ec;
+}
+
 :root {
-  --brand: #006233;
-  --brand-dark: #004d28;
-  --brand-light: #e8f5ee;
+  --brand: #004824;
+  --brand-dark: #003318;
+  --brand-light: #e6f4ec;
   --accent: #ee161f;
 }
 
 body {
-  @apply bg-stone-50 text-stone-900 antialiased;
+  @apply bg-surface text-on-surface antialiased;
+  font-family: var(--font-noto), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
 }
 
 .prose-content h3 {
