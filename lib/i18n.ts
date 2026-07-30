@@ -72,6 +72,7 @@ const dictionaries = {
       "Merci de vous présenter à l'heure exacte de votre rendez-vous, muni de tous les documents nécessaires ainsi que du montant de la taxe consulaire en espèces.",
     downloadForm: "Télécharger le formulaire (PDF)",
     downloadFormHint: "À imprimer, remplir et apporter le jour du rendez-vous.",
+    menu: "Menu",
   },
   en: {
     home: "Home",
@@ -142,6 +143,7 @@ const dictionaries = {
       "Please arrive at the exact time of your appointment, with all required documents and the consular fee amount in cash.",
     downloadForm: "Download the form (PDF)",
     downloadFormHint: "Print it, fill it in and bring it on the day of your appointment.",
+    menu: "Menu",
   },
   ar: {
     home: "الرئيسية",
@@ -212,6 +214,7 @@ const dictionaries = {
       "يرجى الحضور في الوقت المحدد لموعدك، مع جميع المستندات المطلوبة ومبلغ الرسم القنصلي نقدًا.",
     downloadForm: "تحميل الاستمارة (PDF)",
     downloadFormHint: "اطبعها واملأها وأحضرها يوم الموعد.",
+    menu: "القائمة",
   },
 } as const;
 

@@ -23,7 +23,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
     <div className="mx-auto max-w-3xl">
       <Stepper current={2} />
 
-      <Link href="/rdv" className="text-sm text-outline hover:underline">
+      <Link href="/rdv" className="inline-flex min-h-11 items-center text-sm text-outline hover:underline">
         ← {dict.back}
       </Link>
       <h1 className="mt-2 text-center text-3xl font-bold text-primary">{service.name}</h1>
