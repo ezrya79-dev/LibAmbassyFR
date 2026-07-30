@@ -32,7 +32,7 @@ export default async function FormalityPage({
     <div className="mx-auto max-w-3xl">
       <Stepper current={3} />
 
-      <Link href={`/rdv/${serviceId}`} className="text-sm text-outline hover:underline">
+      <Link href={`/rdv/${serviceId}`} className="inline-flex min-h-11 items-center text-sm text-outline hover:underline">
         ← {dict.back} ({formality.service.name})
       </Link>
       <h1 className="mt-2 text-center text-2xl font-bold text-primary sm:text-3xl">{formality.name}</h1>
@@ -91,7 +91,7 @@ export default async function FormalityPage({
           {formality.emailContact && (
             <a
               href={`mailto:${formality.emailContact}`}
-              className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:underline"
+              className="inline-flex min-h-11 items-center gap-1 break-all text-sm text-on-surface-variant hover:underline"
             >
               <Mail className="h-4 w-4" /> {formality.emailContact}
             </a>

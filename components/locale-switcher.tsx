@@ -25,7 +25,7 @@ export function LocaleSwitcher({ current }: { current: string }) {
               router.refresh();
             })
           }
-          className={`px-2 py-1.5 text-xs font-medium ${
+          className={`inline-flex min-h-11 min-w-11 items-center justify-center px-3 text-sm font-medium sm:min-h-9 sm:min-w-9 sm:text-xs ${
             current === l.code ? "bg-[var(--brand)] text-white" : "bg-white hover:bg-stone-100"
           }`}
         >

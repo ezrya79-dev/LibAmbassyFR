@@ -78,7 +78,9 @@ export function SlotPicker({
           {daysWithSlots.map((day) => (
             <div key={day.date}>
               <div className="mb-2 text-sm font-semibold capitalize text-stone-700">{day.label}</div>
-              <div className="flex flex-wrap gap-2">
+              {/* Grille sur mobile (créneaux alignés, pleine largeur tactile),
+                  retour au flux libre dès `sm`. */}
+              <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
                 {day.slots.map((slot) => {
                   const isSelected = selected === slot.startISO;
                   return (
@@ -88,7 +90,7 @@ export function SlotPicker({
                       onClick={() =>
                         onSelect({ startISO: slot.startISO, dayLabel: day.label, timeLabel: slot.label })
                       }
-                      className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+                      className={`min-h-11 rounded-lg border px-3 text-sm font-medium transition-colors ${
                         isSelected
                           ? "border-[var(--brand)] bg-[var(--brand)] text-white"
                           : "border-stone-300 bg-white hover:border-[var(--brand)] hover:text-[var(--brand)]"

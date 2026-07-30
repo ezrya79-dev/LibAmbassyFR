@@ -87,14 +87,15 @@ export default async function ConfirmationPage({
       </div>
 
       <Card className={canceled ? "opacity-60" : ""}>
-        <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+        {/* Empilé sur mobile : une adresse email longue débordait de la carte. */}
+        <div className="flex flex-col gap-3 border-b border-stone-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-xs uppercase text-stone-500">{dict.reference}</div>
             <div className="text-xl font-bold tracking-wider text-[var(--brand)]">{appt.reference}</div>
           </div>
-          <div className="text-end text-sm text-stone-600">
+          <div className="min-w-0 text-sm text-stone-600 sm:text-end">
             {appt.applicant.firstName} {appt.applicant.lastName}
-            <div className="text-xs text-stone-400">{appt.applicant.email}</div>
+            <div className="break-all text-xs text-stone-400">{appt.applicant.email}</div>
           </div>
         </div>
 
@@ -172,17 +173,18 @@ export default async function ConfirmationPage({
         </div>
       )}
 
+      {/* Boutons pleine largeur sur mobile — actions principales de fin de parcours. */}
       {!canceled && (
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <a
             href={`/api/rdv/ics?ref=${appt.reference}&t=${appt.manageToken}`}
-            className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--brand-dark)]"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--brand)] px-4 text-sm font-medium text-white hover:bg-[var(--brand-dark)]"
           >
             <CalendarPlus className="h-4 w-4" /> {dict.addToCalendar}
           </a>
           <Link
             href={manageHref}
-            className="inline-flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-medium hover:bg-stone-100"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-stone-300 bg-white px-4 text-sm font-medium hover:bg-stone-100"
           >
             <Settings2 className="h-4 w-4" /> {dict.manageBooking}
           </Link>

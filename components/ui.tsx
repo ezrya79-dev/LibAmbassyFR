@@ -17,7 +17,8 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer",
+        // min-h-11 = 44 px : cible tactile minimale (WCAG 2.5.5 / Apple HIG).
+        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer",
         styles[variant],
         className
       )}
@@ -30,7 +31,9 @@ export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInp
   return (
     <input
       className={cn(
-        "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]",
+        // text-base sur mobile : en dessous de 16 px, iOS zoome automatiquement
+        // au focus et casse la mise en page.
+        "min-h-11 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-base focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)] sm:text-sm",
         className
       )}
       {...props}
@@ -42,7 +45,7 @@ export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<H
   return (
     <textarea
       className={cn(
-        "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]",
+        "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-base focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)] sm:text-sm",
         className
       )}
       {...props}
@@ -54,7 +57,7 @@ export function Select({ className, children, ...props }: React.SelectHTMLAttrib
   return (
     <select
       className={cn(
-        "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none",
+        "min-h-11 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-base focus:border-[var(--brand)] focus:outline-none sm:text-sm",
         className
       )}
       {...props}

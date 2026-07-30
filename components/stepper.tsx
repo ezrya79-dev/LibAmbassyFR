@@ -22,12 +22,16 @@ export function Stepper({ current }: { current: number }) {
               >
                 {done ? "✓" : n}
               </div>
-              <span className={`mt-1 text-xs ${active ? "font-semibold text-primary" : "text-outline"}`}>
+              {/* Le libellé de l'étape courante suffit sur très petit écran :
+                  les 4 libellés côte à côte débordaient sous 360 px. */}
+              <span
+                className={`mt-1 text-[11px] sm:text-xs ${active ? "font-semibold text-primary" : "hidden text-outline sm:inline"}`}
+              >
                 {label}
               </span>
             </div>
             {n < STEPS.length && (
-              <div className={`mx-2 mb-5 h-0.5 w-8 sm:w-16 ${done ? "bg-primary-container" : "bg-outline-variant"}`} />
+              <div className={`mx-1.5 mb-5 h-0.5 w-6 sm:mx-2 sm:w-16 ${done ? "bg-primary-container" : "bg-outline-variant"}`} />
             )}
           </div>
         );
